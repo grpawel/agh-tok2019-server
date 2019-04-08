@@ -17,8 +17,8 @@
             if (xhr.readyState == XMLHttpRequest.DONE) {
                 var json = xhr.responseText;
                 obj = JSON.parse(json);
-                score = obj['score'];
-                lastResult = obj['lastResult'];
+                score = obj['score'].toFixed(2);
+                lastResult = obj['lastResult'].toFixed(2);
                 rank =  obj['rank'];
                 color = obj['color'];
                 document.getElementById("comment").value = 'Ostatni wynik = '
