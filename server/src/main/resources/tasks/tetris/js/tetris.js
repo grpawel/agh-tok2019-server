@@ -788,7 +788,7 @@ var tetris = {
         for (var j = 0; j < tetris.shape[block][pos][0].length; j++) {
           // for each block of the new pos ...
           if (tetris.shape[block][pos][i][j] == 1) {
-            // ... check if there is room to move
+            // ... check if there is group to move
             if (x + j < 0 || x + j >= tetris.cols || y + i >= tetris.rows) {
               // off the wall
               allowed = false;

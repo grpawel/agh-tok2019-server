@@ -63,7 +63,7 @@
                 group = obj['group'];
                 nick = obj['nick'];
                 age = obj['age'];
-                //window.alert('room = ' + obj['room']);
+                //window.alert('group = ' + obj['group']);
                 //window.alert('nick = ' + obj['nick']);
                 //window.alert('age = ' + obj['age']);
                 if(age != null) {
@@ -85,7 +85,7 @@
             xhr.send(JSON.stringify({result: score, group: group, nick: nick, age: age}));
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == XMLHttpRequest.DONE) {
-                    //window.alert(JSON.stringify({result: score, room: room, nick: nick, age: age}));
+                    //window.alert(JSON.stringify({result: score, group: group, nick: nick, age: age}));
                     window.location.replace(xhr.responseText);
                 }
             }

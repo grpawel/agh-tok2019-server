@@ -4153,8 +4153,8 @@ function $CompileProvider($provide) {
             // combine directives from the original node and from the template:
             // - take the array of directives for this element
             // - split it into two parts, those that were already applied and those that weren't
-            // - collect directives from the template, add them to the second room and sort them
-            // - append the second room with new directives to the first room
+            // - collect directives from the template, add them to the second group and sort them
+            // - append the second group with new directives to the first group
             directives = directives.concat(
                 collectDirectives(
                     compileNode,
@@ -7334,7 +7334,7 @@ function $RouteProvider(){
           lastMatchedIndex = 0;
 
       while ((paramMatch = re.exec(when)) !== null) {
-        // Find each :param in `when` and replace it with a capturing room.
+        // Find each :param in `when` and replace it with a capturing group.
         // Append all other sections of when unchanged.
         regex += when.slice(lastMatchedIndex, paramMatch.index);
         regex += '([^\\/]*)';
@@ -10900,7 +10900,7 @@ function FormController(element, attrs) {
  * @description
  * Nestable alias of {@link ng.directive:form `form`} directive. HTML
  * does not allow nesting of form elements. It is useful to nest forms, for example if the validity of a
- * sub-room of controls needs to be determined.
+ * sub-group of controls needs to be determined.
  *
  * @param {string=} name|ngForm Name of the form. If specified, the form controller will be published into
  *                       related scope, under this name.
@@ -14211,13 +14211,13 @@ var scriptDirective = ['$templateCache', function($templateCache) {
  *   * for array data sources:
  *     * `label` **`for`** `value` **`in`** `array`
  *     * `select` **`as`** `label` **`for`** `value` **`in`** `array`
- *     * `label`  **`room by`** `room` **`for`** `value` **`in`** `array`
- *     * `select` **`as`** `label` **`room by`** `room` **`for`** `value` **`in`** `array`
+ *     * `label`  **`group by`** `group` **`for`** `value` **`in`** `array`
+ *     * `select` **`as`** `label` **`group by`** `group` **`for`** `value` **`in`** `array`
  *   * for object data sources:
  *     * `label` **`for (`**`key` **`,`** `value`**`) in`** `object`
  *     * `select` **`as`** `label` **`for (`**`key` **`,`** `value`**`) in`** `object`
- *     * `label` **`room by`** `room` **`for (`**`key`**`,`** `value`**`) in`** `object`
- *     * `select` **`as`** `label` **`room by`** `room`
+ *     * `label` **`group by`** `group` **`for (`**`key`**`,`** `value`**`) in`** `object`
+ *     * `select` **`as`** `label` **`group by`** `group`
  *         **`for` `(`**`key`**`,`** `value`**`) in`** `object`
  *
  * Where:
@@ -14230,7 +14230,7 @@ var scriptDirective = ['$templateCache', function($templateCache) {
  *     `expression` will most likely refer to the `value` variable (e.g. `value.propertyName`).
  *   * `select`: The result of this expression will be bound to the model of the parent `<select>`
  *      element. If not specified, `select` expression will default to `value`.
- *   * `room`: The result of this expression will be used to room options using the `<optgroup>`
+ *   * `group`: The result of this expression will be used to group options using the `<optgroup>`
  *      DOM element.
  *
  * @example
@@ -14270,7 +14270,7 @@ var scriptDirective = ['$templateCache', function($templateCache) {
           </span><br/>
 
           Color grouped by shade:
-          <select ng-model="color" ng-options="c.name room by c.shade for c in colors">
+          <select ng-model="color" ng-options="c.name group by c.shade for c in colors">
           </select><br/>
 
 
@@ -14482,7 +14482,7 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
             valueFn = $parse(match[2] ? match[1] : valueName),
             valuesFn = $parse(match[7]),
             // This is an array of array of existing option groups in DOM. We try to reuse these if possible
-            // optionGroupsCache[0] is the options with no option room
+            // optionGroupsCache[0] is the options with no option group
             // optionGroupsCache[?][0] is the parent: either the SELECT or OPTGROUP element
             optionGroupsCache = [[{element: selectElement, label:''}]];
 
@@ -14514,7 +14514,7 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
               for (groupIndex = 0, groupLength = optionGroupsCache.length;
                    groupIndex < groupLength;
                    groupIndex++) {
-                // list of options for that room. (first item has the parent)
+                // list of options for that group. (first item has the parent)
                 optionGroup = optionGroupsCache[groupIndex];
 
                 for(index = 1, length = optionGroup.length; index < length; index++) {
@@ -14605,10 +14605,10 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
           for (groupIndex = 0, groupLength = optionGroupNames.length;
                groupIndex < groupLength;
                groupIndex++) {
-            // current option room name or '' if no room
+            // current option group name or '' if no group
             optionGroupName = optionGroupNames[groupIndex];
 
-            // list of options for that room. (first item has the parent)
+            // list of options for that group. (first item has the parent)
             optionGroup = optionGroups[optionGroupName];
 
             if (optionGroupsCache.length <= groupIndex) {
@@ -14622,7 +14622,7 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
               selectElement.append(existingParent.element);
             } else {
               existingOptions = optionGroupsCache[groupIndex];
-              existingParent = existingOptions[0];  // either SELECT (no room) or OPTGROUP element
+              existingParent = existingOptions[0];  // either SELECT (no group) or OPTGROUP element
 
               // update the OPTGROUP label if not the same.
               if (existingParent.label != optionGroupName) {
@@ -14676,7 +14676,7 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
                 lastElement = element;
               }
             }
-            // remove any excessive OPTIONs in a room
+            // remove any excessive OPTIONs in a group
             index++; // increment since the existingOptions[0] is parent element not OPTION
             while(existingOptions.length > index) {
               existingOptions.pop().element.remove();
