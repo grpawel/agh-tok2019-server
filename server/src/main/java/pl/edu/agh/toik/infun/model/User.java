@@ -43,7 +43,7 @@ public class User {
 
     }
 
-    public String getRandomTask() throws NoMoreAvailableTasksException {
+    public String getNextTask() throws NoMoreAvailableTasksException {
         if (completedNumber < availableTasks.size()) {
             currentTask = availableTasks.get(completedNumber);
             return currentTask;

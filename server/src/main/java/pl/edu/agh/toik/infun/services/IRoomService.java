@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public interface IRoomService {
-    List<TaskConfig> getTasks(List<String> jsons);
+    List<TaskConfig> createDefaultTasksConfig(List<String> jsons);
 
     void addRoom(Room room) throws RoomAlreadyExistsException;
 
@@ -20,7 +20,7 @@ public interface IRoomService {
 
     String getConfig(String task, String cookie) throws NoSuchUserException;
 
-    String getRandomTask(String cookie) throws NoMoreAvailableTasksException, NoSuchUserException;
+    String getNextTask(String cookie) throws NoMoreAvailableTasksException, NoSuchUserException;
 
     boolean isCreator(String roomId, String cookie);
 

@@ -15,13 +15,11 @@ import pl.edu.agh.toik.infun.model.requests.TaskConfig;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 public class RoomService implements IRoomService {
     private List<Room> rooms;
     private Map<String, TaskConfig> mapTaskNameConfig;
-    private Gson gson = new Gson();
 
     public RoomService() {
         this.rooms = Collections.synchronizedList(new ArrayList<Room>());
@@ -29,9 +27,8 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public List<TaskConfig> getTasks(List<String> jsons) {
-//        System.out.println(jsons.stream().map(j -> gson.fromJson(j, TaskConfig.class)).collect(Collectors.toList()));
-//        System.out.println((TaskConfig)((Object)jsons.stream().map(j -> gson.fromJson(j, TaskConfig.class)).collect(Collectors.toList()).get(1)));
+    public List<TaskConfig> createDefaultTasksConfig(List<String> jsons) {
+        Gson gson = new Gson();
         List<TaskConfig> taskConfigList = jsons.stream().map(j -> gson.fromJson(j, TaskConfig.class)).collect(Collectors.toList());
         taskConfigList.forEach(tc -> mapTaskNameConfig.putIfAbsent(tc.getName(), tc));
 
@@ -50,7 +47,7 @@ public class RoomService implements IRoomService {
     @Override
     public void addUser(String name, int age, String roomId, String cookie) throws UserAlreadyExistsException {
         if (rooms.stream().anyMatch(g -> g.getUserByCookie(cookie).isPresent())) {
-            throw new UserAlreadyExistsException("Użytkownik z ciasteczkiem " + cookie + " już istanieje");
+            throw new UserAlreadyExistsException("Użytkownik z ciasteczkiem " + cookie + " już istnieje");
         }
 
         Optional<Room> room = rooms.stream().filter(g -> g.getId().equals(roomId)).findFirst();
@@ -81,7 +78,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public String getRandomTask(String cookie) throws NoMoreAvailableTasksException, NoSuchUserException {
+    public String getNextTask(String cookie) throws NoMoreAvailableTasksException, NoSuchUserException {
         Optional<Room> roomOptional = rooms.stream().filter(g -> g.getUserByCookie(cookie).isPresent()).findFirst();
         if (!roomOptional.isPresent()) {
             throw new NoSuchUserException("Nie ma użytkownika z ciasteczkiem = " + cookie);
@@ -94,7 +91,7 @@ public class RoomService implements IRoomService {
         }
 
         User user = userOptional.get();
-        return user.getRandomTask();
+        return user.getNextTask();
     }
 
     @Override
@@ -134,7 +131,9 @@ public class RoomService implements IRoomService {
 
     @Override
     public Optional<Room> getRoomById(String roomId) {
-        return rooms.stream().filter(g -> g.getId().equals(roomId)).findFirst();
+        return rooms.stream()
+                .filter(g -> g.getId().equals(roomId))
+                .findFirst();
     }
 
     @Override
@@ -180,7 +179,7 @@ public class RoomService implements IRoomService {
                 lastResultResponse.setRank(1 + room.getUserList()
                         .stream()
                         .map(User::getScore)
-                        .filter(s -> s > user.getScore() )
+                        .filter(s -> s > user.getScore())
                         .count());
                 lastResultResponse.setColor(user.getColor());
                 return lastResultResponse;

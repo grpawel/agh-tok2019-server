@@ -48,7 +48,6 @@ public class Room {
             System.out.println("GENERATED LIST = " + resultList);
             return resultList;
         }
-
         String currentTask = tasks.remove(random.nextInt(tasks.size()));
         resultList.add(currentTask);
         String previousTask = currentTask;

@@ -8,13 +8,11 @@ import pl.edu.agh.toik.infun.exceptions.*;
 import pl.edu.agh.toik.infun.model.Room;
 import pl.edu.agh.toik.infun.model.domain.UserResult;
 import pl.edu.agh.toik.infun.model.domain.TaskResult;
-import pl.edu.agh.toik.infun.model.requests.CreateRoomInput;
-import pl.edu.agh.toik.infun.model.requests.CreateRoomInputConfig;
-import pl.edu.agh.toik.infun.model.requests.JoinRoomInput;
-import pl.edu.agh.toik.infun.model.requests.LastResultResponse;
+import pl.edu.agh.toik.infun.model.requests.*;
 import pl.edu.agh.toik.infun.services.IFolderScanService;
 import pl.edu.agh.toik.infun.services.IRoomService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,11 +34,10 @@ public class InfunController {
 
     @RequestMapping("/room/create")
     String createRoom(Model model, @CookieValue("JSESSIONID") String cookie) {
-        CreateRoomInput createRoomInput = new CreateRoomInput(roomService.getTasks(
+        CreateRoomInput createRoomInput = new CreateRoomInput(roomService.createDefaultTasksConfig(
                 folderScanService.scanFolder())
         );
         model.addAttribute("createRoomInput", createRoomInput);
-//        System.out.println(createRoomInput);
         return "create_room";
     }
 
@@ -55,40 +52,34 @@ public class InfunController {
         roomService.addUser(joinRoomInput.nick, joinRoomInput.age, joinRoomInput.roomId, cookie);
         return "redirect:/tasks/new";
     }
-//
-//    @GetMapping(value = "/newtask")
-//    String getNewTask(@CookieValue("JSESSIONID") String cookie, Model model) {
-//        return "redirect:/tasks/new";
-//    }
-
 
     @GetMapping("/tasks/new")
-    public String getFile(@CookieValue("JSESSIONID") String cookie) throws NoSuchUserException {
+    public String getNextTask(@CookieValue("JSESSIONID") String cookie) throws NoSuchUserException {
         try {
-            return roomService.getRandomTask(cookie) + "/index";
+            return roomService.getNextTask(cookie) + "/index";
         } catch (NoMoreAvailableTasksException e) {
             return "redirect:/end";
         }
     }
 
     @RequestMapping("/manage")
-    String manage(@ModelAttribute("createRoomInput") CreateRoomInputConfig createRoomInputConfig, @CookieValue("JSESSIONID") String cookie, Model model) throws RoomAlreadyExistsException, NoRoomSelectedException {
-
-        List<String> userChoice = createRoomInputConfig.getTasksConfig();
-        if (userChoice == null || userChoice.size() == 0) {
-            throw new NoRoomSelectedException("Nie wybrano żadnego pokoju");
-        }
-        //todo
-//        userChoice.forEach(System.out::println);
-        String roomId = createRoomInputConfig.getRoomId();
+    String manage(@ModelAttribute("createRoomInput") CreateRoomInput createRoomInput, @CookieValue("JSESSIONID") String cookie, Model model) throws RoomAlreadyExistsException, NoGameSelectedException {
+        List<TaskConfig> userChoice = createRoomInput.getTasksConfig();
+        String roomId = createRoomInput.getRoomId();
         if (roomId == null || roomId.trim().equals("")) {
             roomId = roomService.generateRandomRoomId();
         }
-        //room
-        roomService.addRoom(new Room(roomId,
-                userChoice.stream().
-                        map(taskName -> roomService.getTaskConfig(taskName)).
-                        collect(Collectors.toList()), cookie, createRoomInputConfig.getTaskNumber()));
+        List<TaskConfig> filteredConfigs = userChoice.stream().filter(taskConfig -> taskConfig.name != null).collect(Collectors.toList());
+
+        if (filteredConfigs.size() == 0) {
+            throw new NoGameSelectedException("Nie wybrano żadnej gry");
+        }
+        List<TaskConfig> configs = new ArrayList<>();
+        for (TaskConfig taskConfig : filteredConfigs) {
+            configs.add(new TaskConfig(taskConfig.name.trim(), taskConfig.config == null ? new ArrayList<>() : taskConfig.config));
+        }
+
+        roomService.addRoom(new Room(roomId, configs, cookie, createRoomInput.getTaskNumber()));
         //todo group_id -> room_id in HTML
         model.addAttribute("group_id", roomId);
         return "manage";
