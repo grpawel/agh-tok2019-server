@@ -44,13 +44,17 @@
 
         <center>
             <div class="form-check">
-                <label class="form-check-label">
+                    <label>Wybierz gry</label>
+<!--                <label class="form-check-label">-->
                     <ul class="list-group">
                         <li class="list-group-item" th:each="task, stat : *{tasksConfig}">
                             <input class="form-check-input" type="checkbox"
+                                   th:id="'item-' + ${task.name}"
                                    th:field="*{tasksConfig[__${stat.index}__].name}"
-                                   th:text="| &nbsp; ${task.name}"
                                    th:value="${task.name} + ' '"/> <!-- add ' ' to avoid checking box by thymeleaf, later trim in code -->
+
+                            <label th:for="'item-' + ${task.name}" th:text="| &nbsp; ${task.name}"></label>
+
                             <ul class="list-group" th:object="${task}">
                                 <li class="list-group-item" th:each="paramConfig, stat_param : *{config}">
                                     <div>
@@ -65,13 +69,13 @@
                             </ul>
                         </li>
                     </ul>
-                </label>
+<!--                </label>-->
             </div>
         </center>
 
         <div class="buttons">
-            <input class="btn btn-primary" type="submit" value="Zatwierdź"/>
-            <input class="btn btn-primary" type="reset" value="Zresetuj"/>
+            <input class="btn btn-secondary" type="reset" value="Resetuj"/>
+            <input class="btn btn-primary" type="submit" value="Stwórz"/>
         </div>
     </form>
 </div>
