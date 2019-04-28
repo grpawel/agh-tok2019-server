@@ -8,9 +8,9 @@
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <style>
-         body {
+        body {
             font-family: Tahoma;
-         }
+        }
 
 
     </style>
@@ -44,32 +44,34 @@
 
         <center>
             <div class="form-check">
-                    <label>Wybierz gry</label>
-<!--                <label class="form-check-label">-->
-                    <ul class="list-group">
-                        <li class="list-group-item" th:each="task, stat : *{tasksConfig}">
-                            <input class="form-check-input" type="checkbox"
-                                   th:id="'item-' + ${task.name}"
-                                   th:field="*{tasksConfig[__${stat.index}__].name}"
-                                   th:value="${task.name} + ' '"/> <!-- add ' ' to avoid checking box by thymeleaf, later trim in code -->
+                <label>Wybierz gry</label>
+                <!--                <label class="form-check-label">-->
+                <ul class="list-group">
+                    <li class="list-group-item" th:each="task, stat : *{tasksConfig}">
+                        <input class="form-check-input" type="checkbox"
+                               th:id="'item-' + ${task.name}"
+                               th:field="*{tasksConfig[__${stat.index}__].name}"
+                               th:value="${task.name} + ' '"/>
+                        <!-- add ' ' to avoid checking box by thymeleaf, later trim in code -->
 
-                            <label th:for="'item-' + ${task.name}" th:text="| &nbsp; ${task.name}"></label>
+                        <label th:for="'item-' + ${task.name}" th:text="| &nbsp; ${task.name}"></label>
 
-                            <ul class="list-group" th:object="${task}">
-                                <li class="list-group-item" th:each="paramConfig, stat_param : *{config}">
-                                    <div>
-                                        <label class="col-sm-2 col-form-label" th:text="${paramConfig.name}" ></label>
-                                        <input type="hidden"
-                                               th:field="${createRoomInput.tasksConfig[__${stat.index}__].config[__${stat_param.index}__].name}"
-                                               th:value="${paramConfig.name}"/> <!--  hidden as only way to to pass field -->
-                                        <input type="text" class="form-control" id="value"
-                                               th:field="${createRoomInput.tasksConfig[__${stat.index}__].config[__${stat_param.index}__].value}"/>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-<!--                </label>-->
+                        <ul class="list-group" th:object="${task}">
+                            <li class="list-group-item" th:each="paramConfig, stat_param : *{config}">
+                                <div>
+                                    <label class="col-sm-2 col-form-label" th:text="${paramConfig.name}"></label>
+                                    <input type="hidden"
+                                           th:field="${createRoomInput.tasksConfig[__${stat.index}__].config[__${stat_param.index}__].name}"
+                                           th:value="${paramConfig.name}"/>
+                                    <!--  hidden as only way to to pass field -->
+                                    <input type="text" class="form-control" id="value"
+                                           th:field="${createRoomInput.tasksConfig[__${stat.index}__].config[__${stat_param.index}__].value}"/>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!--                </label>-->
             </div>
         </center>
 
