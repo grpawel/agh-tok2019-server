@@ -44,8 +44,8 @@ form {
     padding: 8px;
     background-color: rgba(0,0,0,0);
     background-image: url(/img/transparent-pixel.png);
-    height: 128px;
-    width: 128px;
+    height: auto;
+    width: 100%;
 }
 
 .task-box {
