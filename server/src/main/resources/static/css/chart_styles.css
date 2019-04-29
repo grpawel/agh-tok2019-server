@@ -1,0 +1,35 @@
+.numberCircle {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    padding: 16px 16px 16px 8px ;
+    background: #fff;
+    border: 3px solid;
+    text-align: center;
+    font: 20px Arial, sans-serif;
+    color: #000000;
+}
+div.item {
+    /*width: 80%;*/
+    height: 80px;
+    padding-top: 10px;
+    vertical-align: middle;
+    text-align: center;
+    border-top: 1px solid;
+    border-color: #DDD;
+}
+div.one {
+    height: 60px;
+    width: 60px;
+    float: left;
+    vertical-align: middle;
+
+}
+div.two {
+    float: left;
+    height: 60px;
+    vertical-align: middle;
+    padding-top: 20px;
+    padding-left: 5%;
+    font: 20px Arial, sans-serif;
+}
