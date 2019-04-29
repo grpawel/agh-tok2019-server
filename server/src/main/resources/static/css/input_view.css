@@ -62,6 +62,8 @@ form {
     border: 1px solid #ddd;
     background-color: white;
     margin-bottom: -1px;
+    position: absolute;
+    z-index: 1;
 }
 .task-config:last-child {
     margin-bottom: 0;
@@ -70,7 +72,14 @@ form {
 .task-config-button {
     border: 1px solid transparent;
     padding: 8px 12px;
-    width: 100%
+    width: 100%;
+    height: 40px;
+}
+
+.task-config-button-placeholder {
+    background-color: transparent;
+    width: 100%;
+    height: 40px;
 }
 
 .task-config-label {

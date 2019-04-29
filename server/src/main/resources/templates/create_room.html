@@ -65,6 +65,8 @@
                         <button type="button" class="task-config-button" data-toggle="collapse" th:data-target="'#task-' + ${task.name} + '-config'"  th:if="${task.config !=null}">
                             Konfiguracja
                         </button>
+                        <div class="task-config-button-placeholder" th:unless="${task.config !=null}">
+                        </div>
                         <div th:id="'task-' + ${task.name} + '-config'"
                              class="task-config-container collapse"
                              th:object="${task}">
