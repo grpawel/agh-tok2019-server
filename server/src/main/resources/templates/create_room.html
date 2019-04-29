@@ -47,7 +47,7 @@
                 <label>Wybierz gry</label>
                 <!--    /            <label class="form-check-label">-->
                 <div class="row">
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 col-task-container" th:each="task, stat : *{tasksConfig}">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 task-container" th:each="task, stat : *{tasksConfig}">
                         <div class="checkboxes">
                         <input class="form-check-input" type="checkbox"
                                th:id="'item-' + ${task.name}"
