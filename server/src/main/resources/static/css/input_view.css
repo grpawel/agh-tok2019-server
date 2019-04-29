@@ -57,13 +57,16 @@ form {
     padding-bottom: 7px;
 }
 
+.task-config-container {
+    position: absolute;
+    z-index: 1;
+}
+
 .task-config {
     padding: 8px 12px;
     border: 1px solid #ddd;
     background-color: white;
     margin-bottom: -1px;
-    position: absolute;
-    z-index: 1;
 }
 .task-config:last-child {
     margin-bottom: 0;
