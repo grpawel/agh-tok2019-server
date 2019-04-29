@@ -62,7 +62,11 @@
                                  onerror="this.src='/img/transparent-pixel.png'">
                         </label>
                         </div>
-                        <div class="task-config-container"
+                        <button type="button" class="task-config-button" data-toggle="collapse" th:data-target="'#task-' + ${task.name} + '-config'">
+                            Konfiguracja
+                        </button>
+                        <div th:id="'task-' + ${task.name} + '-config'"
+                             class="task-config-container collapse"
                              th:object="${task}">
                             <div class="task-config" th:each="paramConfig, stat_param : *{config}">
                                 <div>
