@@ -52,6 +52,9 @@ form {
     text-align: center;
     width: 100%;
     margin-bottom: 0;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 7px;
 }
 
 .task-config {
