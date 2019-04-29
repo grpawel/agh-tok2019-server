@@ -80,8 +80,7 @@ public class InfunController {
         }
 
         roomService.addRoom(new Room(roomId, configs, cookie, createRoomInput.getTaskNumber()));
-        //todo group_id -> room_id in HTML
-        model.addAttribute("group_id", roomId);
+        model.addAttribute("room_id", roomId);
         return "manage";
     }
 
@@ -120,7 +119,7 @@ public class InfunController {
     @RequestMapping("/{room_id}/results")
     @ResponseBody
     List<UserResult> getResults(@PathVariable(value = "room_id") final String roomId, @CookieValue("JSESSIONID") String cookie) throws NoSuchUserException, NoSuchRoomException, AccessDeniedException {
-//        roomService.getResults(roomId, cookie).forEach((k, v) -> System.out.println(k + " : " + v));
+        System.out.println("RESULTS: " + roomService.getResults(roomId, cookie));
         return roomService.getResults(roomId, cookie);
     }
 
