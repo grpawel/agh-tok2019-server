@@ -16,7 +16,7 @@
     </style>
 </head>
 <body>
-<div class="container data thumbnail">
+<div class="container">
     <div style="text-align: center;">
         <h1>Stwórz pokój</h1>
         <hr/>
@@ -24,57 +24,62 @@
     </div>
 
     <form class="" action="#" th:action="@{/manage}" th:object="${createRoomInput}" method="post">
+        <div class="well">
+            <div class="form-group row">
+                <label for="inputGroupId" class="col-sm-2 col-form-label">ID pokoju</label>
+                <div class="col-sm-10">
+                    <input type="text" th:field="*{roomId}" class="form-control" id="inputGroupId"
+                           placeholder="ID pokoju (jeśli puste, zostanie wylosowane)"/>
+                </div>
+            </div>
 
-        <div class="form-group row">
-            <label for="inputGroupId" class="col-sm-2 col-form-label">ID pokoju</label>
-            <div class="col-sm-10">
-                <input type="text" th:field="*{roomId}" class="form-control" id="inputGroupId"
-                       placeholder="ID pokoju (jeśli puste, zostanie wylosowane)"/>
+            <div class="form-group row">
+                <label for="taskNumber" class="col-sm-2 col-form-label">Ilość zadań</label>
+                <div class="col-sm-10">
+                    <input type="number" th:field="*{taskNumber}" th:value=10 th:min=1 th:max=100 class="form-control"
+                           id="taskNumber"
+                           placeholder="Ilość zadań"/>
+                </div>
             </div>
         </div>
-
-        <div class="form-group row">
-            <label for="taskNumber" class="col-sm-2 col-form-label">Ilość zadań</label>
-            <div class="col-sm-10">
-                <input type="number" th:field="*{taskNumber}" th:value=10 th:min=1 th:max=100 class="form-control"
-                       id="taskNumber"
-                       placeholder="Ilość zadań"/>
-            </div>
-        </div>
-
-        <center>
+        <div class="well">
             <div class="form-check">
                 <label>Wybierz gry</label>
-                <!--                <label class="form-check-label">-->
-                <ul class="list-group">
-                    <li class="list-group-item" th:each="task, stat : *{tasksConfig}">
+                <!--    /            <label class="form-check-label">-->
+                <div class="row">
+                    <div class="col-lg-3 col-sm-4 col-xs-6 task-container" th:each="task, stat : *{tasksConfig}">
+                        <div class="checkboxes">
                         <input class="form-check-input" type="checkbox"
                                th:id="'item-' + ${task.name}"
                                th:field="*{tasksConfig[__${stat.index}__].name}"
                                th:value="${task.name} + ' '"/>
                         <!-- add ' ' to avoid checking box by thymeleaf, later trim in code -->
-
-                        <label th:for="'item-' + ${task.name}" th:text="| &nbsp; ${task.name}"></label>
-
+                        <label class="checkbox-like task-box" th:for="'item-' + ${task.name}">
+                            <h3 th:text="${task.name}"></h3>
+                            <img class="task-thumbnail"
+                                 th:src="'/img/' + ${task.name} + '/img/thumbnail.png'"
+                                 th:alt="${task.name}"
+                                 onerror="this.src='/img/transparent-pixel.png'">
+                        </label>
+                        </div>
                         <ul class="list-group" th:object="${task}">
                             <li class="list-group-item" th:each="paramConfig, stat_param : *{config}">
                                 <div>
                                     <label class="col-sm-2 col-form-label" th:text="${paramConfig.name}"></label>
-                                    <input type="hidden"
+                                    <input test1="test1" type="hidden"
                                            th:field="${createRoomInput.tasksConfig[__${stat.index}__].config[__${stat_param.index}__].name}"
                                            th:value="${paramConfig.name}"/>
                                     <!--  hidden as only way to to pass field -->
-                                    <input type="text" class="form-control" id="value"
+                                    <input test2="test2" type="text" class="form-control" id="value"
                                            th:field="${createRoomInput.tasksConfig[__${stat.index}__].config[__${stat_param.index}__].value}"/>
                                 </div>
                             </li>
                         </ul>
-                    </li>
-                </ul>
+                    </div>
+                </div>
                 <!--                </label>-->
             </div>
-        </center>
-
+        </div>
         <div class="buttons">
             <input class="btn btn-secondary" type="reset" value="Resetuj"/>
             <input class="btn btn-primary" type="submit" value="Stwórz"/>

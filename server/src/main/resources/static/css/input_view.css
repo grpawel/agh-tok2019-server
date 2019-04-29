@@ -20,3 +20,35 @@ body {
 form {
     margin: 10%;
 }
+
+.checkboxes input[type=checkbox] {
+    display: none;
+}
+
+.checkbox-like {
+    background-color: darkgray;
+}
+
+/* ignore input added by thymeleaf using * */
+.checkboxes input[type=checkbox]:checked ~ .checkbox-like
+{
+    background-color: #5bc0de;
+}
+
+.task-container {
+    margin-bottom: 24px;
+}
+
+.task-thumbnail {
+    /*display:block;*/
+    padding: 8px;
+    background-color: rgba(0,0,0,0);
+    background-image: url(/img/transparent-pixel.png);
+    height: 128px;
+    width: 128px;
+}
+
+.task-box {
+    text-align: center;
+    width: 100%;
+}
