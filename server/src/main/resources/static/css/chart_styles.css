@@ -1,35 +1,24 @@
-.numberCircle {
-    border-radius: 50%;
-    width: 60px;
+div.item {
+    width: 70px;
     height: 60px;
-    padding: 16px 16px 16px 8px ;
-    background: #fff;
-    border: 3px solid;
+    vertical-align: middle;
     text-align: center;
-    font: 20px Arial, sans-serif;
+    margin: 16px 0 16px 0px;
+    padding: 8px 8px 0px 0px;
+    background: #fff;
+    border-top: 6px solid;
     color: #000000;
 }
-div.item {
-    /*width: 80%;*/
-    height: 80px;
-    padding-top: 10px;
-    vertical-align: middle;
-    text-align: center;
-    border-top: 1px solid;
-    border-color: #DDD;
-}
 div.one {
-    height: 60px;
-    width: 60px;
+    height: 30px;
+    width: 70px;
     float: left;
     vertical-align: middle;
-
+    font: 18px Arial, sans-serif;
 }
 div.two {
     float: left;
-    height: 60px;
+    width: 70px;
     vertical-align: middle;
-    padding-top: 20px;
-    padding-left: 5%;
-    font: 20px Arial, sans-serif;
+    font: 16px Arial bold, sans-serif;
 }
