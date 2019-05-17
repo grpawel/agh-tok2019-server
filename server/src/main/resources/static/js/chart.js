@@ -28,8 +28,8 @@ function getResults(roomId) {
 
 }
 function prepareData(roomId) {
-    // var results = getResults(roomId);
-    var results = mockData();
+     var results = getResults(roomId);
+    // var results = mockData();
 
     var array = [];
 
