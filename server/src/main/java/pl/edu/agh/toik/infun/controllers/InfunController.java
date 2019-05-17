@@ -84,7 +84,7 @@ public class InfunController {
         return "manage";
     }
 
-    @RequestMapping("/{task_name}/config")
+    @RequestMapping(value = "/{task_name}/config", produces = "text/plain;charset=UTF-8")
     @ResponseBody
     String getConfig(@PathVariable(value = "task_name") final String taskName, @CookieValue("JSESSIONID") String cookie) throws NoSuchUserException {
         return roomService.getConfig(taskName, cookie);
