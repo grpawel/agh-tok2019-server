@@ -6,6 +6,7 @@ import org.apache.commons.text.RandomStringGenerator;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.toik.infun.exceptions.*;
+import pl.edu.agh.toik.infun.model.ConfigDTO;
 import pl.edu.agh.toik.infun.model.Room;
 import pl.edu.agh.toik.infun.model.User;
 import pl.edu.agh.toik.infun.model.domain.UserResult;
@@ -57,21 +58,20 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public String getConfig(String task, String cookie) throws NoSuchUserException {
-        JSONObject config = new JSONObject();
+    public ConfigDTO getConfig(String task, String cookie) throws NoSuchUserException {
+        ConfigDTO configDTO = new ConfigDTO();
         for (Room room : rooms) {
             Optional<User> user = room.getUserByCookie(cookie);
             if (user.isPresent()) {
-                config.put("group", room.getId());
-                config.put("nick", user.get().getNick());
-                config.put("age", user.get().getAge());
+                configDTO.setRoom(room.getId());
+                configDTO.setNick(user.get().getNick());
+                configDTO.setAge(user.get().getAge());
                 try {
-                    config.put("config", room.getTasksConfig().stream().filter(t -> t.getName().equals(task)).findFirst().get().getConfig());
+                    configDTO.setConfig(room.getTasksConfig().stream().filter(t -> t.getName().equals(task)).findFirst().get().getConfig());
                 } catch (Exception e) {
-                    System.out.println("there is no config for " + task);
-                    config.put("config", new ArrayList<>());
+                    configDTO.setConfig(new ArrayList<>());
                 }
-                return config.toString();
+                return configDTO;
             }
         }
         throw new NoSuchUserException("Nie ma użytkownika z ciastaczkiem = " + cookie);

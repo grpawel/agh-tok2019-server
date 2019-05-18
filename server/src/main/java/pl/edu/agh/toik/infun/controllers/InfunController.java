@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.toik.infun.exceptions.*;
+import pl.edu.agh.toik.infun.model.ConfigDTO;
 import pl.edu.agh.toik.infun.model.Room;
 import pl.edu.agh.toik.infun.model.domain.UserResult;
 import pl.edu.agh.toik.infun.model.domain.TaskResult;
@@ -84,9 +85,9 @@ public class InfunController {
         return "manage";
     }
 
-    @RequestMapping(value = "/{task_name}/config", produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "/{task_name}/config")
     @ResponseBody
-    String getConfig(@PathVariable(value = "task_name") final String taskName, @CookieValue("JSESSIONID") String cookie) throws NoSuchUserException {
+    ConfigDTO getConfig(@PathVariable(value = "task_name") final String taskName, @CookieValue("JSESSIONID") String cookie) throws NoSuchUserException {
         return roomService.getConfig(taskName, cookie);
     }
 

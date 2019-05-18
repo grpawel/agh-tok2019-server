@@ -2,6 +2,7 @@ package pl.edu.agh.toik.infun.services;
 
 import org.springframework.stereotype.Service;
 import pl.edu.agh.toik.infun.exceptions.*;
+import pl.edu.agh.toik.infun.model.ConfigDTO;
 import pl.edu.agh.toik.infun.model.Room;
 import pl.edu.agh.toik.infun.model.domain.UserResult;
 import pl.edu.agh.toik.infun.model.requests.LastResultResponse;
@@ -18,7 +19,7 @@ public interface IRoomService {
 
     void addUser(String name, int age, String room, String cookie) throws UserAlreadyExistsException;
 
-    String getConfig(String task, String cookie) throws NoSuchUserException;
+    ConfigDTO getConfig(String task, String cookie) throws NoSuchUserException;
 
     String getNextTask(String cookie) throws NoMoreAvailableTasksException, NoSuchUserException;
 
