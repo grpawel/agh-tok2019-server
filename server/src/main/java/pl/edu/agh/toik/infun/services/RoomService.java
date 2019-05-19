@@ -3,7 +3,6 @@ package pl.edu.agh.toik.infun.services;
 import com.google.gson.Gson;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.toik.infun.exceptions.*;
 import pl.edu.agh.toik.infun.model.ConfigDTO;
@@ -159,9 +158,9 @@ public class RoomService implements IRoomService {
                 .filteredBy(CharacterPredicates.ASCII_UPPERCASE_LETTERS)
                 .build();
         String roomId;
-        while (containsRoomId(roomId = randomStringGenerator.generate(4))) {
-        }
-
+        do {
+            roomId = randomStringGenerator.generate(4);
+        } while (containsRoomId(roomId));
         return roomId;
     }
 
