@@ -21,6 +21,8 @@ public interface IRoomService {
 
     void removeUser(String cookie);
 
+    List<Room> getRoomsByCookie(String cookie);
+
     ConfigDTO getConfig(String task, String cookie) throws NoUserCookieFoundException;
 
     String getNextTask(String cookie) throws NoMoreAvailableTasksException, NoUserCookieFoundException;

@@ -47,6 +47,10 @@ public class InfunController {
 
     @GetMapping(value = "/room/join")
     String joinRoom(Model model, @CookieValue("JSESSIONID") String cookie) {
+        final List<Room> joinedRooms = roomService.getRoomsByCookie(cookie);
+        if (!joinedRooms.isEmpty()) {
+            model.addAttribute("existingGameId", joinedRooms.get(0).getId());
+        }
         model.addAttribute("joinRoomInput", new JoinRoomInput());
         return "join_room";
     }

@@ -64,6 +64,13 @@ public class RoomService implements IRoomService {
     }
 
     @Override
+    public List<Room> getRoomsByCookie(final String cookie) {
+        return rooms.stream()
+                .filter(room -> room.getUserByCookie(cookie).isPresent())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ConfigDTO getConfig(String task, String cookie) throws NoUserCookieFoundException {
         ConfigDTO configDTO = new ConfigDTO();
         for (Room room : rooms) {

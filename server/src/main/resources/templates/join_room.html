@@ -10,6 +10,13 @@
 </head>
 <body>
 <div class="container data thumbnail">
+    <div th:if="${existingGameId != null}" class="centered">
+        <h1>Kontynuuj grę</h1>
+        <a class="btn btn-primary"
+           href="/tasks/new"
+        th:text="${existingGameId}">
+        </a>
+    </div>
     <div style="text-align: center;">
         <h1>Dołącz do gry</h1>
         <hr/>
