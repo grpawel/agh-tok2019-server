@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.toik.infun.exceptions.*;
 import pl.edu.agh.toik.infun.model.ConfigDTO;
 import pl.edu.agh.toik.infun.model.Room;
-import pl.edu.agh.toik.infun.model.domain.UserResult;
 import pl.edu.agh.toik.infun.model.domain.TaskResult;
-import pl.edu.agh.toik.infun.model.requests.*;
+import pl.edu.agh.toik.infun.model.domain.UserResult;
+import pl.edu.agh.toik.infun.model.requests.CreateRoomInput;
+import pl.edu.agh.toik.infun.model.requests.JoinRoomInput;
+import pl.edu.agh.toik.infun.model.requests.LastResultResponse;
+import pl.edu.agh.toik.infun.model.requests.TaskConfig;
 import pl.edu.agh.toik.infun.services.IFolderScanService;
 import pl.edu.agh.toik.infun.services.IRoomService;
 
@@ -84,6 +87,17 @@ public class InfunController {
         }
 
         roomService.addRoom(new Room(roomId, configs, cookie, createRoomInput.getTaskNumber()));
+        return "redirect:/manage/" + roomId;
+    }
+
+    @RequestMapping("/manage/{roomId}")
+    String manage(@PathVariable final String roomId, @CookieValue("JSESSIONID") String cookie, Model model) {
+        if (!roomService.getRoomById(roomId).isPresent()) {
+            model.addAttribute("error", String.format("Pokój o id='%s' nie istnieje.", roomId));
+            model.addAttribute("link", "/room/create");
+            model.addAttribute("link_name", "Stwórz pokój");
+            return "error_view_custom";
+        }
         model.addAttribute("room_id", roomId);
         return "manage";
     }

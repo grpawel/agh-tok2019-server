@@ -38,7 +38,7 @@
                     <ul class="nav navbar-nav">
                         <li><a th:text="${room_id}"></a></li>
                         <li><a href="/room/create">Stwórz nowy pokój</a></li>
-                        <li><a id="link" href="/remove">Usuń obecny pokój</a></li>
+                        <li><a id="link" th:href="'/' + ${roomId} + '/remove'">Usuń obecny pokój</a></li>
                     </ul>
                 </div>
         
@@ -54,9 +54,5 @@
         </div>
         
         <p th:text="${room_id}" id="roomID" style="visibility:hidden"/>
-        
-        <script>
-            document.getElementById("link").href = document.getElementById("roomID").innerHTML + "/remove";
-        </script>
     </body>
 </html>
