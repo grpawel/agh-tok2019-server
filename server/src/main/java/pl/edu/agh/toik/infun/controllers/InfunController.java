@@ -73,7 +73,10 @@ public class InfunController {
         List<TaskConfig> filteredConfigs = userChoice.stream().filter(taskConfig -> taskConfig.name != null).collect(Collectors.toList());
 
         if (filteredConfigs.size() == 0) {
-            throw new NoGameSelectedException("Nie wybrano żadnej gry");
+            model.addAttribute("error", "Nie wybrano żadnej gry.");
+            model.addAttribute("link", "/room/create");
+            model.addAttribute("link_name", "Powrót");
+            return "error_view_custom";
         }
         List<TaskConfig> configs = new ArrayList<>();
         for (TaskConfig taskConfig : filteredConfigs) {

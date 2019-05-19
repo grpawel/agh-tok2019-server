@@ -17,6 +17,10 @@ body {
     text-align: center;
 }
 
+.centered {
+    text-align: center;
+}
+
 form {
     margin: 10%;
 }

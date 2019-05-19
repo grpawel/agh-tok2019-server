@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>InFun - error</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/input_view.css}"/>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+
+
+<div class="container data thumbnail">
+
+    <div class="alert alert-danger centered">
+        <strong>Błąd</strong>: <span th:text="${error}"></span>
+    </div>
+    <div class="centered">
+        <a class="btn btn-primary"
+           th:href="${link}"
+           th:text="${link_name}">
+        </a>
+    </div>
+
+</div>
+
+
+</body>
+</html>
