@@ -1,0 +1,15 @@
+{
+	"name": "robot",
+	"config": [
+		{
+			"name": "port",
+			"value": 5000,
+			"required": true
+		},
+		{
+			"name": "time",
+			"value": 10,
+			"required": false
+		}
+	]
+}

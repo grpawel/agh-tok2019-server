@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Robot controller</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel= "stylesheet" type= "text/css" href= "./css/bootstrap.min.css">
+    <script>
+        var host = location.host;
+        var ip = host.split(":")[0];
+        console.log(ip);
+    </script>
+
+</head>
+
+<body>
+
+<!-- Page Content -->
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col-md-12 text-center">
+            <h1 class="mt-5">Robot Control</h1>
+            <div class="row mt-5">
+                <div class="col align-self-start col-xs-4 col-lg-4"></div>
+                <div class="col align-self-center col-xs-4 col-lg-4">
+                    <button type="button" class="btn btn-primary btn-lg" id="up" style="width:100%;">
+                        &#8593;
+                    </button>
+                </div>
+                <div class="col align-self-end col-xs-4 col-lg-4"></div>
+            </div>
+            <div class="row mt-1">
+                <div class="col align-self-start col-xs-4 col-lg-4">
+                    <button type="button" class="btn btn-primary btn-lg" id="left" style="width:100%;">
+                        &#8592;
+                    </button>
+                </div>
+                <div class="col align-self-center col-xs-4 col-lg-4"></div>
+                <div class="col align-self-end col-xs-4 col-lg-4">
+                    <button type="button" class="btn btn-primary btn-lg" id="right" style="width:100%;">
+                        &#8594;
+                    </button>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col align-self-start col-xs-4 col-lg-4"></div>
+                <div class="col align-self-center col-xs-4 col-lg-4">
+                    <button type="button" class="btn btn-primary btn-lg" id="down" style="width:100%;"  >
+                        &#8595;
+                    </button>
+                </div>
+                <div class="col align-self-end col-xs-4 col-lg-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="./js/robot.js"></script>
+
+</body>
+
+</html>
