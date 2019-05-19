@@ -117,7 +117,7 @@ public class InfunController {
     @GetMapping(value = "/{room_id}/remove")
     String endGame(@CookieValue("JSESSIONID") String cookie, @PathVariable(value = "room_id") final String roomId) throws CannotRemoveRoomException {
         roomService.removeRoom(roomId, cookie);
-        return "redirect:/";
+        return "redirect:/room/create";
     }
 
     @RequestMapping("/{room_id}/results")
