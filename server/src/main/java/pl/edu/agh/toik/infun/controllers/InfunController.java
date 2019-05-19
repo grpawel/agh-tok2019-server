@@ -53,6 +53,7 @@ public class InfunController {
 
     @PostMapping(value = "/room/join")
     String getTask(@ModelAttribute JoinRoomInput joinRoomInput, @CookieValue("JSESSIONID") String cookie, Model model) throws UserAlreadyExistsException, NoSuchRoomException {
+        roomService.removeUser(cookie);
         roomService.addUser(joinRoomInput.nick, joinRoomInput.age, joinRoomInput.roomId, cookie);
         return "redirect:/tasks/new";
     }

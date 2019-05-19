@@ -19,6 +19,8 @@ public interface IRoomService {
 
     void addUser(String name, int age, String room, String cookie) throws UserAlreadyExistsException, NoSuchRoomException;
 
+    void removeUser(String cookie);
+
     ConfigDTO getConfig(String task, String cookie) throws NoUserCookieFoundException;
 
     String getNextTask(String cookie) throws NoMoreAvailableTasksException, NoUserCookieFoundException;

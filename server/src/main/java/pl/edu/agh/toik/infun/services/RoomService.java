@@ -59,6 +59,11 @@ public class RoomService implements IRoomService {
     }
 
     @Override
+    public void removeUser(final String cookie) {
+        rooms.forEach(room -> room.removeUser(cookie));
+    }
+
+    @Override
     public ConfigDTO getConfig(String task, String cookie) throws NoUserCookieFoundException {
         ConfigDTO configDTO = new ConfigDTO();
         for (Room room : rooms) {
