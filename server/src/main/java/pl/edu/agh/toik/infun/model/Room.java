@@ -73,7 +73,6 @@ public class Room {
         userList.removeIf(user -> user.getCookieValue().equals(cookie));
     }
 
-
     public Optional<User> getUserByCookie(String cookie) {
         return userList.stream().filter(u -> u.getCookieValue().equals(cookie)).findFirst();
     }
