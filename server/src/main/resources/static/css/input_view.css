@@ -1,6 +1,7 @@
 body {
     font-family: Tahoma;
 }
+
 .data {
     margin-left: 20%;
     margin-top: 5%;
@@ -18,7 +19,22 @@ body {
 }
 
 form {
-    margin: 10%;
+    margin-top: 3%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.create-room-heading {
+    text-align: center;
+}
+
+.form-check {
+    text-align: left;
+    display: inline-block;
+}
+
+.form-check-select-all {
+    text-align: right;
 }
 
 .checkboxes input[type=checkbox] {
@@ -26,23 +42,33 @@ form {
 }
 
 .checkbox-like {
-    background-color: #bfbfbf;
+    background-color: #e0e0e0;
+}
+
+.title-edit {
+    height: 40px;
+    z-index: 1;
+    background-color: #e0e0e0;
 }
 
 /* ignore input added by thymeleaf using * */
-.checkboxes input[type=checkbox]:checked ~ .checkbox-like
-{
+.checkboxes input[type=checkbox]:checked ~ .checkbox-like {
+    background-color: #5bc0de;
+}
+
+.checkboxes input[type=checkbox]:checked ~ .title-edit {
     background-color: #5bc0de;
 }
 
 .task-container {
+    padding-top: 8px;
     margin-bottom: 24px;
 }
 
 .task-thumbnail {
     /*display:block;*/
     padding: 8px;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
     background-image: url(/img/transparent-pixel.png);
     height: auto;
     width: 100%;
@@ -60,31 +86,66 @@ form {
 .task-config-container {
     position: absolute;
     z-index: 1;
+    margin-top: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding-top: 8px;
+    width: 73%;
+    background-color: white;
+}
+
+.task-config-list-container {
+    overflow-y: scroll;
+    max-height: 135px;
+    height: 135px;
 }
 
 .task-config {
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border-top: 1px solid #ddd;
     background-color: white;
     margin-bottom: -1px;
+    width: 90%;
 }
+
 .task-config:last-child {
     margin-bottom: 0;
 }
 
 .task-config-button {
+    float: right;
     border: 1px solid transparent;
     padding: 8px 12px;
-    width: 100%;
-    height: 40px;
+    width: 20%;
+    height: 30px;
 }
 
 .task-config-button-placeholder {
     background-color: transparent;
     width: 100%;
-    height: 40px;
+    height: 30px;
 }
 
 .task-config-label {
-    padding-left: 20px;
+    float: left;
+    /*padding-left: 8px;*/
+}
+
+.title {
+    padding: 8px 0 0 24px;
+    font-size: 20px;
+    width: 80%;
+    height: 100%
+}
+
+.games-container {
+    display: flex;
+}
+
+.games-container > div {
+    flex: 1;
+}
+
+.fa-pen {
+    color: #0040ff;
 }
