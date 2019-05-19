@@ -46,7 +46,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void addUser(String name, int age, String roomId, String cookie) throws UserAlreadyExistsException {
+    public void addUser(String name, int age, String roomId, String cookie) throws UserAlreadyExistsException, NoSuchRoomException {
         if (rooms.stream().anyMatch(g -> g.getUserByCookie(cookie).isPresent())) {
             throw new UserAlreadyExistsException("Użytkownik z ciasteczkiem " + cookie + " już istnieje");
         }
@@ -54,6 +54,8 @@ public class RoomService implements IRoomService {
         Optional<Room> room = rooms.stream().filter(g -> g.getId().equals(roomId)).findFirst();
         if (room.isPresent()) {
             room.get().addUser(name, age, cookie);
+        } else {
+            throw new NoSuchRoomException(String.format("Pokój o id '%s' nie istnieje.", roomId));
         }
     }
 

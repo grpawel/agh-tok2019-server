@@ -17,7 +17,7 @@ public interface IRoomService {
 
     void addRoom(Room room) throws RoomAlreadyExistsException;
 
-    void addUser(String name, int age, String room, String cookie) throws UserAlreadyExistsException;
+    void addUser(String name, int age, String room, String cookie) throws UserAlreadyExistsException, NoSuchRoomException;
 
     ConfigDTO getConfig(String task, String cookie) throws NoSuchUserException;
 
