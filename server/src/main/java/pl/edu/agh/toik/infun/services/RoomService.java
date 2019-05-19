@@ -159,7 +159,7 @@ public class RoomService implements IRoomService {
                 .filteredBy(CharacterPredicates.ASCII_UPPERCASE_LETTERS)
                 .build();
         String roomId;
-        while (containsRoomId(roomId = randomStringGenerator.generate(10))) {
+        while (containsRoomId(roomId = randomStringGenerator.generate(4))) {
         }
 
         return roomId;
