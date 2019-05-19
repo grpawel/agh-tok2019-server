@@ -19,9 +19,9 @@ public interface IRoomService {
 
     void addUser(String name, int age, String room, String cookie) throws UserAlreadyExistsException, NoSuchRoomException;
 
-    ConfigDTO getConfig(String task, String cookie) throws NoSuchUserException;
+    ConfigDTO getConfig(String task, String cookie) throws NoUserCookieFoundException;
 
-    String getNextTask(String cookie) throws NoMoreAvailableTasksException, NoSuchUserException;
+    String getNextTask(String cookie) throws NoMoreAvailableTasksException, NoUserCookieFoundException;
 
     boolean isCreator(String roomId, String cookie);
 
@@ -31,7 +31,7 @@ public interface IRoomService {
 
     void removeRoom(String roomId, String cookie) throws CannotRemoveRoomException;
 
-    void addResult(String taskName, String cookie, String nick, String room, double result) throws NoSuchRoomException, NoSuchUserException;
+    void addResult(String taskName, String cookie, String nick, String room, double result) throws NoSuchRoomException, NoUserCookieFoundException;
 
     List<UserResult> getResults(String roomId, String cookie) throws NoSuchRoomException, AccessDeniedException;
 

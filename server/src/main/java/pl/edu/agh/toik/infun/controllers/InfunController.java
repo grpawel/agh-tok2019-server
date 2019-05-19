@@ -52,13 +52,13 @@ public class InfunController {
     }
 
     @PostMapping(value = "/room/join")
-    String getTask(@ModelAttribute JoinRoomInput joinRoomInput, @CookieValue("JSESSIONID") String cookie, Model model) throws NoSuchUserException, UserAlreadyExistsException, NoSuchRoomException {
+    String getTask(@ModelAttribute JoinRoomInput joinRoomInput, @CookieValue("JSESSIONID") String cookie, Model model) throws UserAlreadyExistsException, NoSuchRoomException {
         roomService.addUser(joinRoomInput.nick, joinRoomInput.age, joinRoomInput.roomId, cookie);
         return "redirect:/tasks/new";
     }
 
     @GetMapping("/tasks/new")
-    public String getNextTask(@CookieValue("JSESSIONID") String cookie) throws NoSuchUserException {
+    public String getNextTask(@CookieValue("JSESSIONID") String cookie) throws NoUserCookieFoundException {
         try {
             return roomService.getNextTask(cookie) + "/index";
         } catch (NoMoreAvailableTasksException e) {
@@ -105,14 +105,14 @@ public class InfunController {
 
     @RequestMapping(value = "/{task_name}/config")
     @ResponseBody
-    ConfigDTO getConfig(@PathVariable(value = "task_name") final String taskName, @CookieValue("JSESSIONID") String cookie) throws NoSuchUserException {
+    ConfigDTO getConfig(@PathVariable(value = "task_name") final String taskName, @CookieValue("JSESSIONID") String cookie) throws NoUserCookieFoundException {
         return roomService.getConfig(taskName, cookie);
     }
 
 
     @PostMapping(value = "/{task_name}/end")
     @ResponseBody
-    public String endGame(@PathVariable(value = "task_name") final String taskName, @RequestBody TaskResult taskResult, @CookieValue("JSESSIONID") String cookie, Model model) throws NoSuchRoomException, NoSuchUserException {
+    public String endGame(@PathVariable(value = "task_name") final String taskName, @RequestBody TaskResult taskResult, @CookieValue("JSESSIONID") String cookie, Model model) throws NoSuchRoomException, NoUserCookieFoundException {
         roomService.addResult(taskName, cookie, taskResult.getNick(), taskResult.getRoom(), taskResult.getResult());
         model.addAttribute("result", taskResult);
         return "/task_result";
@@ -137,14 +137,14 @@ public class InfunController {
 
     @RequestMapping("/{room_id}/results")
     @ResponseBody
-    List<UserResult> getResults(@PathVariable(value = "room_id") final String roomId, @CookieValue("JSESSIONID") String cookie) throws NoSuchUserException, NoSuchRoomException, AccessDeniedException {
+    List<UserResult> getResults(@PathVariable(value = "room_id") final String roomId, @CookieValue("JSESSIONID") String cookie) throws NoSuchRoomException, AccessDeniedException {
         System.out.println("RESULTS: " + roomService.getResults(roomId, cookie));
         return roomService.getResults(roomId, cookie);
     }
 
     @RequestMapping("/last/results")
     @ResponseBody
-    LastResultResponse getLastResults(@CookieValue("JSESSIONID") String cookie) throws NoSuchUserException {
+    LastResultResponse getLastResults(@CookieValue("JSESSIONID") String cookie) {
         return roomService.getLastResults(cookie);
     }
 }

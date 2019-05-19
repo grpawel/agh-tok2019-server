@@ -59,7 +59,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public ConfigDTO getConfig(String task, String cookie) throws NoSuchUserException {
+    public ConfigDTO getConfig(String task, String cookie) throws NoUserCookieFoundException {
         ConfigDTO configDTO = new ConfigDTO();
         for (Room room : rooms) {
             Optional<User> user = room.getUserByCookie(cookie);
@@ -75,20 +75,20 @@ public class RoomService implements IRoomService {
                 return configDTO;
             }
         }
-        throw new NoSuchUserException("Nie ma użytkownika z ciastaczkiem = " + cookie);
+        throw new NoUserCookieFoundException();
     }
 
     @Override
-    public String getNextTask(String cookie) throws NoMoreAvailableTasksException, NoSuchUserException {
+    public String getNextTask(String cookie) throws NoMoreAvailableTasksException, NoUserCookieFoundException {
         Optional<Room> roomOptional = rooms.stream().filter(g -> g.getUserByCookie(cookie).isPresent()).findFirst();
         if (!roomOptional.isPresent()) {
-            throw new NoSuchUserException("Nie ma użytkownika z ciasteczkiem = " + cookie);
+            throw new NoUserCookieFoundException();
         }
 
         Room room = roomOptional.get();
         Optional<User> userOptional = room.getUserByCookie(cookie);
         if (!userOptional.isPresent()) {
-            throw new NoSuchUserException("Nie ma użytkownika z ciasteczkiem = " + cookie);
+            throw new NoUserCookieFoundException();
         }
 
         User user = userOptional.get();
@@ -123,7 +123,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void addResult(String taskName, String cookie, String nick, String roomId, double result) throws NoSuchRoomException, NoSuchUserException {
+    public void addResult(String taskName, String cookie, String nick, String roomId, double result) throws NoSuchRoomException, NoUserCookieFoundException {
         final Optional<Room> room = this.getRoomById(roomId);
         if (!room.isPresent()) {
             throw new NoSuchRoomException("Nie ma pokoju o id = " + roomId);
@@ -131,7 +131,7 @@ public class RoomService implements IRoomService {
 
         Optional<User> user = room.get().getUserList().stream().filter(u -> u.getNick().equals(nick) && u.getCookieValue().equals(cookie)).findFirst();
         if (!user.isPresent()) {
-            throw new NoSuchUserException("Nie ma użytkownika = " + user + ", z ciasteczkiem = " + cookie);
+            throw new NoUserCookieFoundException();
         }
 
         user.get().addUserResult(result, taskName);
