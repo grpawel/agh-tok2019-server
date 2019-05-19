@@ -3,7 +3,6 @@ package pl.edu.agh.toik.infun.services;
 import com.google.gson.Gson;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.toik.infun.exceptions.*;
 import pl.edu.agh.toik.infun.model.ConfigDTO;
@@ -104,6 +103,13 @@ public class RoomService implements IRoomService {
                 .findFirst()
                 .map(g -> g.getCreatorCookie().equals(cookie))
                 .orElse(false);
+    }
+
+    public List<String> roomIdsCreatedBy(final String cookie) {
+        return rooms.stream()
+                .filter(room -> room.getCreatorCookie().equals(cookie))
+                .map(Room::getId)
+                .collect(Collectors.toList());
     }
 
     @Override

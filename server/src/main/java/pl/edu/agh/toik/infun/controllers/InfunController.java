@@ -99,6 +99,7 @@ public class InfunController {
             return "error_view_custom";
         }
         model.addAttribute("room_id", roomId);
+        model.addAttribute("owned_rooms", roomService.roomIdsCreatedBy(cookie));
         return "manage";
     }
 

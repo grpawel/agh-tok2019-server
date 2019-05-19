@@ -25,6 +25,8 @@ public interface IRoomService {
 
     boolean isCreator(String roomId, String cookie);
 
+    public List<String> roomIdsCreatedBy(final String cookie);
+
     public Optional<Room> getRoomById(String roomId);
 
     void removeRoom(String roomId, String cookie) throws CannotRemoveRoomException;
