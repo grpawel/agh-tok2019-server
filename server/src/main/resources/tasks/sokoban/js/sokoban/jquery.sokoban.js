@@ -12,7 +12,7 @@
   var _R    = RegExp;
   var _LINE = /^(\s*)(\#|\#[ \.\@\+\$\*\#]*\#)(\s*)$/;
   var _CLS  = 'soko-';
-  var _LC = $( '<div class="' + _CLS + 'group"></div>' );
+  var _LC = $( '<div class="' + _CLS + 'room"></div>' );
   
   function _obj () { return {}; }
   
@@ -280,7 +280,7 @@
         this.levelContainer[0].focus();
         $( window ).scrollTop( sc );
       }
-      if ( !this.boxesLeft ) { // group is solved
+      if ( !this.boxesLeft ) { // room is solved
         var event = document.createEvent('Event');
         event.initEvent('won-game', true, true);
         document.dispatchEvent(event);

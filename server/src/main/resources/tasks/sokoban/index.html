@@ -1,189 +1,263 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset=utf-8 />
+<head>
+    <meta charset=utf-8/>
 
-		  <title>Sōkoban: Microban levels</title>
-		  
-		  <link rel="stylesheet" media="screen" href="css/sokoban/screen.css">
-		  <link rel="stylesheet" media="screen" href="css/sokoban/sokoban.css">
+    <title>Sōkoban: Microban levels</title>
+    <meta name="viewport" content="width=device-width">
 
-		  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-		  <script src="js/sokoban/jquery.processEach.js"></script>
-		  <script src="js/sokoban/jquery.sokoban.js"></script>
-		  <script>
-		    jQuery(function(){ 
+    <link rel="stylesheet" media="screen" href="css/sokoban/screen.css">
+    <link rel="stylesheet" media="screen" href="css/sokoban/sokoban.css">
 
-		      var levels = $( 'pre.sokoban.level' );
-		      
-		      levels
-		        .processEach(function(){
-		          $( this ).sokoban();
-		        })
-		        .bind( 'keydown', function (e) {
-		          if ( e.keyCode == 9 ) { // tab
-		            var i = (levels.length + ( levels.index( this ) + (e.shiftKey ? -1 : 1) ) ) % levels.length;
-		            var o = levels.eq( i ).find( '.soko-room:first' ).focus();
-		            $( window ).scrollTop( levels.eq( i ).offset().top );
-		          }
-		        })
-		        .eq( 0 )
-		          .find( '.soko-room:first' )
-		          .focus()
-		          ;
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="js/sokoban/jquery.processEach.js"></script>
+    <script src="js/sokoban/jquery.sokoban.js"></script>
+    <script>
+        jQuery(function () {
 
-		    });
-		  </script>
-	    <script>
+            var levels = $('pre.sokoban.level');
 
+            levels
+                .processEach(function () {
+                    $(this).sokoban();
+                })
+                .bind('keydown', function (e) {
+                    if (e.keyCode == 9) { // tab
+                        var i = (levels.length + (levels.index(this) + (e.shiftKey ? -1 : 1))) % levels.length;
+                        var o = levels.eq(i).find('.soko-room:first').focus();
+                        $(window).scrollTop(levels.eq(i).offset().top);
+                    }
+                })
+                .eq(0)
+                .find('.soko-room:first')
+                .focus()
+            ;
+
+        });
+    </script>
+    <script>
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/sokoban/config', true);
-        xhr.onreadystatechange = function(){
-            if(xhr.readyState == XMLHttpRequest.DONE) {
+        var vNick = '';
+        var vAge = 3;
+        var vGroup = ''
+        xhr.open('GET', '/sokoban/config', false);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
                 var json = xhr.responseText;
                 obj = JSON.parse(json);
-                startGame();
+                obj = JSON.parse(json);
+                vNick = obj['nick']
+                vAge = obj['age']
+                vGroup = obj['group']
             }
         }
         xhr.send(null);
 
         //TEST data
-        /*
-        obj = {
-            room: 4,
-            nick: 'Mike',
-            age: 1
-        }*/
-        //
 
-        var moveUp = function(){
-          var event = document.createEvent('Event');
-          event.initEvent('move-up', true, true);
-          document.dispatchEvent(event);
+        // obj = {
+        //     group: 4,
+        //     nick: 'Mike',
+        //     age: 1
+        // };
 
-        }
-        var moveDown = function(){
-          var event = document.createEvent('Event');
-          event.initEvent('move-down', true, true);
-          document.dispatchEvent(event);
+        var moveUp = function () {
+            var event = document.createEvent('Event');
+            event.initEvent('move-up', true, true);
+            document.dispatchEvent(event);
 
         }
-        var moveLeft = function(){
-          var event = document.createEvent('Event');
-          event.initEvent('move-left', true, true);
-          document.dispatchEvent(event);
+        var moveDown = function () {
+            var event = document.createEvent('Event');
+            event.initEvent('move-down', true, true);
+            document.dispatchEvent(event);
 
         }
-        var moveRight = function(){
-          var event = document.createEvent('Event');
-          event.initEvent('move-right', true, true);
-          document.dispatchEvent(event);
+        var moveLeft = function () {
+            var event = document.createEvent('Event');
+            event.initEvent('move-left', true, true);
+            document.dispatchEvent(event);
+
+        }
+        var moveRight = function () {
+            var event = document.createEvent('Event');
+            event.initEvent('move-right', true, true);
+            document.dispatchEvent(event);
         }
 
-		var gameFinished = function(score) {
+        function swipedetect(el, callback) {
+
+            var touchsurface = el,
+                swipedir,
+                startX,
+                startY,
+                distX,
+                distY,
+                threshold = 50, //required min distance traveled to be considered swipe
+                restraint = 100, // maximum distance allowed at the same time in perpendicular direction
+                allowedTime = 500, // maximum time allowed to travel that distance
+                elapsedTime,
+                startTime,
+                handleswipe = callback || function (swipedir) {
+                }
+
+            touchsurface.addEventListener('touchstart', function (e) {
+                var touchobj = e.changedTouches[0]
+                swipedir = 'none'
+                dist = 0
+                startX = touchobj.pageX
+                startY = touchobj.pageY
+                startTime = new Date().getTime() // record time when finger first makes contact with surface
+                //e.preventDefault()
+            }, false)
+
+            touchsurface.addEventListener('touchmove', function (e) {
+                e.preventDefault() // prevent scrolling when inside DIV
+            }, {passive: false})
+
+            touchsurface.addEventListener('touchend', function (e) {
+                var touchobj = e.changedTouches[0]
+                distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
+                distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
+                elapsedTime = new Date().getTime() - startTime // get time elapsed
+                if (elapsedTime <= allowedTime) { // first condition for awipe met
+                    if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint) { // 2nd condition for horizontal swipe met
+                        swipedir = (distX < 0) ? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
+                    } else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint) { // 2nd condition for vertical swipe met
+                        swipedir = (distY < 0) ? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
+                    }
+                }
+                handleswipe(swipedir)
+                //e.preventDefault()
+            }, false)
+        };
+
+        swipedetect(document, function (swipedir) {
+            switch (swipedir) {
+                case 'up':
+                    moveUp();
+                    break;
+                case 'down':
+                    moveDown();
+                    break;
+                case 'left':
+                    moveLeft();
+                    break;
+                case 'right':
+                    moveRight();
+                    break;
+            }
+        });
+
+        var gameFinished = function (score) {
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/sokoban/end', true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.send(JSON.stringify({
-                result: score,
-                group: obj.group,
-                nick: obj.nick,
-                age: obj.age
-            }));
-            xhr.onreadystatechange = function() {
+            xhr.send(JSON.stringify({result: score, group: vGroup, nick: vNick, age: vAge}));
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState == XMLHttpRequest.DONE) {
                     window.location.replace(xhr.responseText)
                 }
             }
-
-            //TEST data
-            /*console.log(JSON.stringify({
-                result: score,
-                room: obj.room,
-                nick: obj.nick,
-                age: obj.age
-            }));*/
-            //
         }
 
-        var restartGame = function() {
-          var event = document.createEvent('Event');
-          event.initEvent('restart-level');
-          document.dispatchEvent(event);
+        var restartGame = function () {
+            var event = document.createEvent('Event');
+            event.initEvent('restart-level');
+            document.dispatchEvent(event);
         }
 
-         var gameLost = function() {
-		    var event = document.createEvent('Event');
-		    event.initEvent('lost-event', true, true);
-		    document.dispatchEvent(event);
-		    document.getElementById('faileddiv').style.display = 'block';
-		    document.removeEventListener('won-game', gameWon);
+        var gameLost = function () {
+            var event = document.createEvent('Event');
+            event.initEvent('lost-event', true, true);
+            document.dispatchEvent(event);
+            document.getElementById('faileddiv').style.display = 'block';
+            document.removeEventListener('won-game', gameWon);
             gameFinished(0);
         };
 
-         var gameWon = function() {
+        var gameWon = function () {
             gameFinished(1);
         };
 
-	    var startGame = function () {
-            //var age = document.getElementById('input-age').value;
-            var age = obj.age;
-            if(age > 99) {
+        const timer = function() {
+            var timer = document.querySelector('#time');
+            var counter = 60;
+            setInterval(function(){
+                if(counter === 0){
+                    gameLost();
+                }
+                timer.innerHTML = counter >0 ? String(counter) : 0;
+                counter -= 1;
+            },1000);
+        };
+
+        var startGame = function () {
+            var age = vAge;
+            if (age > 99) {
                 age = 99;
             } else if (age < 0) {
                 age = 1;
             } else {
                 age = Math.floor(age);
             }
-            if(age < 10) {
-            	var nr =Math.floor(Math.random() * 10) + 1;     // returns a number between 1 and 10
-            	var id = 'el'+nr; 
-            	console.log(id);
+            if (age < 10) {
+                var nr = Math.floor(Math.random() * 10) + 1;     // returns a number between 1 and 10
+                var id = 'el' + nr;
+                console.log(id);
                 document.getElementById(id).style.display = "block"
                 document.getElementById(id).children[1].focus()
-                //setTimeout(gameLost, 60000) //TODO change times
+                timer();
+                // setTimeout(gameLost, 60000) //TODO change times
             } else if (age < 16) {
-            	var nr =Math.floor(Math.random() * 10) + 1;    
-            	var id = 'ml'+nr; 
-            	console.log(id);
+                var nr = Math.floor(Math.random() * 10) + 1;
+                var id = 'ml' + nr;
+                console.log(id);
                 document.getElementById(id).style.display = "block"
                 document.getElementById(id).children[1].focus()
-                //setTimeout(gameLost, 10000) //TODO change times
+                timer();
+                // setTimeout(gameLost, 60000) //TODO change times
             } else {
-            	var nr =Math.floor(Math.random() * 10) + 1;   
-            	var id = 'hl'+nr;
-            	console.log(id); 
+                var nr = Math.floor(Math.random() * 10) + 1;
+                var id = 'hl' + nr;
+                console.log(id);
                 document.getElementById(id).style.display = "block"
                 document.getElementById(id).children[1].focus()
-                //setTimeout(gameLost, 10000) //TODO change times
+                timer();
+                // setTimeout(gameLost, 60000) //TODO change times
             }
 
             document.getElementById('restart-button').style.display = "block";
-            document.getElementById('arrows').style.display = "block"
             document.getElementById('start-button').style.display = "none";
             //document.getElementById('input-age').disabled = true;
 
             document.addEventListener('won-game', gameWon);
 
-		};
+        };
 
-	    </script>
-	</head>
-	<body style="font-family: tahoma">
-		<div style="width: 512px; margin: auto">
-			<h2 style="text-align: center" class="text-size">Sokoban</h2>
-			<div style="margin-bottom: 12px" class="text-size">After starting game click on game, use arrow keys to push boxes and put them on marked places with dots.</div>
-			<div style="margin-bottom: 12px" class="text-size">
-				<!-- <label><b>Age: </b></label>
-				<input id="input-age" type="number" min="1" max="99">
-				 -->
+    </script>
+</head>
+<body style="font-family: tahoma">
+<div style="width: 512px; margin: auto">
+    <h2 style="text-align: center" class="text-size">Sokoban</h2>
+    <div style="margin-bottom: 12px" class="text-size">Naciśnij start aby zacząć, przesuwaj palcem po ekranie tak aby przemieścić pudła na miejsca zaznaczone kropkami.
+    </div>
+    <div style="margin-bottom: 12px" class="text-size">
+        <!-- <label><b>Age: </b></label>
+        <input id="input-age" type="number" min="1" max="99">
+         -->
 
-			</div>
-      <div style="display: flex; justify-content: center; margin-top:36px;">
-      <button class="text-size" style="width: 200px; height:50px; font-family: tahoma" id="start-button" onClick="startGame()">Start game!</button>
-      <button class="text-size" style="width: 200px; height:50px; display: none; font-family: tahoma" id="restart-button" onClick="restartGame()">Restart level</button>
-      </div>
-			<div style="display: flex; justify-content: center; flex-direction: column; align-items: center"  id="levels">
+    </div>
+    <div style="display: flex; justify-content: center; margin-top:36px;">
+        <button class="text-size" style="width: 200px; height:50px; font-family: tahoma" id="start-button"
+                onClick="startGame()">Start
+        </button>
+        <button class="text-size" style="width: 200px; height:50px; display: none; font-family: tahoma"
+                id="restart-button" onClick="restartGame()">Restart
+        </button>
+    </div>
+    <div style="display: flex; justify-content: center; flex-direction: column; align-items: center; margin-top:20px;" id="time"></div>
+    <div style="display: flex; justify-content: center; flex-direction: column; align-items: center" id="levels">
 <pre id="el1" style="display: none" class="sokoban level">
 ####
 # .#
@@ -193,7 +267,7 @@
 #  ###
 ####
 </pre>
-<pre id="el2" style="display: none" class="sokoban level">
+        <pre id="el2" style="display: none" class="sokoban level">
 ######
 #    #
 # #@ #
@@ -202,7 +276,7 @@
 #    #
 ######
 </pre>
-<pre id="el3" style="display: none" class="sokoban level">
+        <pre id="el3" style="display: none" class="sokoban level">
   ####
 ###  ####
 #     $ #
@@ -210,7 +284,7 @@
 # . .#@ #
 #########
 </pre>
-<pre id="el4" style="display: none" class="sokoban level">
+        <pre id="el4" style="display: none" class="sokoban level">
 ########
 #      #
 # .**$@#
@@ -218,7 +292,7 @@
 #####  #
     ####
 </pre>
-<pre id="el5" style="display: none" class="sokoban level">
+        <pre id="el5" style="display: none" class="sokoban level">
  #######
  #     #
  # .$. #
@@ -227,7 +301,7 @@
 #      #
 ########
 </pre>
-<pre id="el6" style="display: none" class="sokoban level">
+        <pre id="el6" style="display: none" class="sokoban level">
 ###### #####
 #    ###   #
 # $$     #@#
@@ -235,7 +309,7 @@
 #   ########
 #####
 </pre>
-<pre id="el7" style="display: none" class="sokoban level">
+        <pre id="el7" style="display: none" class="sokoban level">
 #######
 #     #
 # .$. #
@@ -245,7 +319,7 @@
 #  @  #
 #######
 </pre>
-<pre id="el8" style="display: none" class="sokoban level">
+        <pre id="el8" style="display: none" class="sokoban level">
   ######
   # ..@#
   # $$ #
@@ -259,7 +333,7 @@
 ###   #
   #####
 </pre>
-<pre id="el9" style="display: none" class="sokoban level">
+        <pre id="el9" style="display: none" class="sokoban level">
 #####
 #.  ##
 #@$$ #
@@ -268,7 +342,7 @@
   ##.#
    ###
 </pre>
-<pre id="el10" style="display: none" class="sokoban level">
+        <pre id="el10" style="display: none" class="sokoban level">
       #####
       #.  #
       #.# #
@@ -278,7 +352,7 @@
 #       #
 #########
 </pre>
-<pre id="ml1" style="display: none" class="sokoban level">
+        <pre id="ml1" style="display: none" class="sokoban level">
   ######
   #    #
   # ##@##
@@ -288,7 +362,7 @@
 #  ######
 ####
 </pre>
-<pre id="ml2" style="display: none" class="sokoban level">
+        <pre id="ml2" style="display: none" class="sokoban level">
 #####
 #   ##
 # $  #
@@ -298,7 +372,7 @@
   #     #
   #######
 </pre>
-<pre id="ml3" style="display: none" class="sokoban level">
+        <pre id="ml3" style="display: none" class="sokoban level">
 ####
 #. ##
 #.@ #
@@ -309,7 +383,7 @@
  #  ###
  ####
 </pre>
-<pre id="ml4" style="display: none" class="sokoban level">
+        <pre id="ml4" style="display: none" class="sokoban level">
 #######
 #     #
 # # # #
@@ -317,7 +391,7 @@
 #   ###
 #####
 </pre>
-<pre id="ml5" style="display: none" class="sokoban level">
+        <pre id="ml5" style="display: none" class="sokoban level">
      ###
 ######@##
 #    .* #
@@ -326,7 +400,7 @@
     #   #
     #####
 </pre>
-<pre id="ml6" style="display: none" class="sokoban level">
+        <pre id="ml6" style="display: none" class="sokoban level">
  ####
  #  ####
  #     ##
@@ -336,7 +410,7 @@
 #  .#    #
 ##########
 </pre>
-<pre id="ml7" style="display: none" class="sokoban level">
+        <pre id="ml7" style="display: none" class="sokoban level">
 #####
 # @ #
 #...#
@@ -345,7 +419,7 @@
 #    #
 ######
 </pre>
-<pre id="ml8" style="display: none" class="sokoban level">
+        <pre id="ml8" style="display: none" class="sokoban level">
 #######
 #     #
 #. .  #
@@ -356,7 +430,7 @@
   #  #
   ####
 </pre>
-<pre id="ml9" style="display: none" class="sokoban level">
+        <pre id="ml9" style="display: none" class="sokoban level">
 ########
 #   .. #
 #  @$$ #
@@ -366,7 +440,7 @@
    #  #
    ####
 </pre>
-<pre id="ml10" style="display: none"  class="sokoban level">
+        <pre id="ml10" style="display: none" class="sokoban level">
 #######
 #     ###
 #  @$$..#
@@ -376,7 +450,7 @@
   #  #
   ####
 </pre>
-<pre id="hl1" style="display: none" class="sokoban level">
+        <pre id="hl1" style="display: none" class="sokoban level">
 ####
 #  ####
 # . . #
@@ -384,7 +458,7 @@
 ##    #
  ######
 </pre>
-<pre id="hl2" style="display: none" class="sokoban level">
+        <pre id="hl2" style="display: none" class="sokoban level">
 #####
 #   ###
 #. .  #
@@ -395,7 +469,7 @@
  #  ###
  ####
 </pre>
-<pre id="hl3" style="display: none" class="sokoban level">
+        <pre id="hl3" style="display: none" class="sokoban level">
 #######
 #  *  #
 #     #
@@ -404,7 +478,7 @@
  #   #
  #####
 </pre>
-<pre id="hl4" style="display: none" class="sokoban level">
+        <pre id="hl4" style="display: none" class="sokoban level">
 # #####
   #   #
 ###$$@#
@@ -413,7 +487,7 @@
 # . . #
 #######
 </pre>
-<pre id="hl5" style="display: none" class="sokoban level">
+        <pre id="hl5" style="display: none" class="sokoban level">
  ####
  #  ###
  # $$ #
@@ -422,7 +496,7 @@
 #   ###
 #####
 </pre>
-<pre id="hl6" style="display: none" class="sokoban level">
+        <pre id="hl6" style="display: none" class="sokoban level">
  #####
  # @ #
  #   #
@@ -432,7 +506,7 @@
 ###  #
   ####
 </pre>
-<pre id="hl7" style="display: none" class="sokoban level">
+        <pre id="hl7" style="display: none" class="sokoban level">
 ######
 #   .#
 # ## ##
@@ -441,7 +515,7 @@
 #.  ###
 #####
 </pre>
-<pre id="hl8" style="display: none" class="sokoban level">
+        <pre id="hl8" style="display: none" class="sokoban level">
 #####
 #   #
 # @ #
@@ -450,7 +524,7 @@
  #    #
  ######
 </pre>
-<pre id="hl9" style="display: none" class="sokoban level">
+        <pre id="hl9" style="display: none" class="sokoban level">
      #####
      #   ##
      #    #
@@ -461,7 +535,7 @@
 #        #
 ##########
 </pre>
-<pre id="hl10" style="display: none" class="sokoban level">
+        <pre id="hl10" style="display: none" class="sokoban level">
 ####
 #  ###
 # $$ #
@@ -470,21 +544,10 @@
 #   ##
 #####
 </pre>
-<div id='faileddiv' style="margin-bottomo: 12px; display: none">
-<b>FAILED!</b>
+        <div id='faileddiv' style="margin-bottomo: 12px; display: none">
+            <b>FAILED!</b>
+        </div>
+    </div>
 </div>
-<div  id="arrows" style="display: flex; flex-direction: column; display: none; font-family: tahoma">
-<div style="display: flex; justify-content: center">
- <button style="width:120px; height: 120px; font-size: 100px" onClick="moveUp()">^</button>
- </div>
- <div style="display: flex">
- <button  style="width:120px; height: 120px; font-size: 80px" onClick="moveLeft()"><</button>
- <button  style="width:120px; height: 120px; font-size: 80px" onClick="moveDown()">v</button>
- <button  style="width:120px; height: 120px; font-size: 80px" onClick="moveRight()">></button>
- </div>
-</div>
-
-			</div>
-		</div>
-	</body>
+</body>
 </html>
