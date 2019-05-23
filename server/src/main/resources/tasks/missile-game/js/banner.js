@@ -10,11 +10,13 @@ MG.banner = (function () {
 
     var mTitle = '';
     var mText = '';
+    var mSText = '';
 
     var mRootNode;
 
     var mTitleNode;
     var mTextNode;
+    var mTextSecondNode;
 
     var mVisibility;
 
@@ -32,6 +34,10 @@ MG.banner = (function () {
             var titleBoxNode = document.getElementById('banner-title');
             mTitleNode = document.createTextNode('');
             titleBoxNode.appendChild(mTitleNode);
+
+            var titleBoxNode2 = document.getElementById('banner-title2');
+            mTextSecondNode = document.createTextNode('');
+            titleBoxNode2.appendChild(mTextSecondNode);
 
             var textBoxNode = document.getElementById('banner-text');
             mTextNode = document.createTextNode('');
@@ -52,6 +58,7 @@ MG.banner = (function () {
 
                     mTitleNode.data = mTitle;
                     mTextNode.data  = mText;
+                    mTextSecondNode.data = mSText;
                 }
                 // FALLTHROUGH
               case BannerState.HIDDEN:
@@ -76,10 +83,11 @@ MG.banner = (function () {
 
         },
 
-        show: function (newTitle, newText) {
+        show: function (newTitle, newText, newSecText='') {
 
-            mTitle = String(newTitle);
-            mText = String(newText);
+            mTitle = newTitle;
+            mText = newText;
+            mSText = newSecText;
 
             mState = BannerState.MESSAGE_QUEUED;
         },

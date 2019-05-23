@@ -27,7 +27,7 @@ MG.game = (function () {
 
     /* Strings for UI ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     var getLevelString = function () {
-        return mLevel ? 'Omijaj zbliżające się ściany ' : 'Omijaj zbliżające się ściany ';
+        return mLevel ? 'Przesuwaj palcem po ekranie,' : 'Przesuwaj palcem po ekranie,';
     }
 
     var Messages = {
@@ -35,6 +35,9 @@ MG.game = (function () {
             title: getLevelString,
             text: function () {
                 return 'Naciśnij, aby rozpocząć';
+            },
+            title2: function () {
+                return ' aby omijać ściany'
             }
         },
         CRASH: {
@@ -120,7 +123,7 @@ MG.game = (function () {
     }
 
     var goWaitStartLevel = function () {
-        MG.banner.show(Messages.START.title(), Messages.START.text());
+        MG.banner.show(Messages.START.title(), Messages.START.text(), Messages.START.title2());
         MG.util.showMouse();
 
         MG.missile.setAutopilot();
@@ -153,31 +156,31 @@ MG.game = (function () {
     }
 
     var goFinish = function () {
-        MG.banner.show(Messages.FINISH.title(), Messages.FINISH.text());
+        MG.banner.show('', '', Messages.FINISH.title());
         MG.util.showMouse();
 
         MG.missile.setAutopilot();
         MG.missile.setVelocity(getPostLevelIdleVelocity(mLevel));
 
-        setTimeout(() => someFun(mProgress.toFixed(2)),2000);
+        someFun(1);
 
-        mState = GameState.FINISHED;
+        // mState = GameState.FINISHED;
     }
 
     var goCrash = function () {
         MG.util.showMouse();
 
         if (mLives === 0) {
-            MG.banner.show(Messages.GAME_OVER.title(), Messages.GAME_OVER.text());
+            MG.banner.show('', '', Messages.GAME_OVER.title());
         } else {
             MG.banner.show(Messages.CRASH.title(), Messages.CRASH.text());
         }
 
         playCrashAnimation()
 
-        setTimeout(() => someFun(mProgress.toFixed(2)),2000);
+        someFun(mProgress.toFixed(2))
 
-        mState = GameState.CRASHED;
+        // mState = GameState.CRASHED;
 
     }
 

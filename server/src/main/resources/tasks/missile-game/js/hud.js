@@ -101,6 +101,9 @@ MG.hud = (function () {
                 var mProgress = 0.0;
                 var mBestProgress = 0.0;
 
+                var a;
+                var b;
+
                 return {
                     update: function (dt) {
                         mProgress = MG.game.getProgress();
@@ -108,8 +111,20 @@ MG.hud = (function () {
                     },
 
                     updateDOM: function () {
-                        mProgressMarkNode.setAttribute('transform', 'translate(0,'+mProgress+')');
-                        mBestProgressMarkNode.setAttribute('transform', 'translate(0,'+mBestProgress+')');
+                        if(mProgress >= 0.89) {
+                            a = 0.9;
+                        } else {
+                            a = mProgress;
+                        }
+
+                        if(mBestProgress >= 0.89) {
+                            b = 0.9;
+                        } else {
+                            b = mBestProgress;
+                        }
+
+                        mProgressMarkNode.setAttribute('transform', 'translate(0,'+a+')');
+                        mBestProgressMarkNode.setAttribute('transform', 'translate(0,'+b+')');
                     }
                 };
             } ());
