@@ -3,9 +3,9 @@ package pl.edu.agh.toik.infun.services;
 import com.google.gson.Gson;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.toik.infun.exceptions.*;
+import pl.edu.agh.toik.infun.model.ConfigDTO;
 import pl.edu.agh.toik.infun.model.Room;
 import pl.edu.agh.toik.infun.model.User;
 import pl.edu.agh.toik.infun.model.domain.UserResult;
@@ -45,7 +45,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void addUser(String name, int age, String roomId, String cookie) throws UserAlreadyExistsException {
+    public void addUser(String name, int age, String roomId, String cookie) throws UserAlreadyExistsException, NoSuchRoomException {
         if (rooms.stream().anyMatch(g -> g.getUserByCookie(cookie).isPresent())) {
             throw new UserAlreadyExistsException("Użytkownik z ciasteczkiem " + cookie + " już istnieje");
         }
@@ -53,41 +53,54 @@ public class RoomService implements IRoomService {
         Optional<Room> room = rooms.stream().filter(g -> g.getId().equals(roomId)).findFirst();
         if (room.isPresent()) {
             room.get().addUser(name, age, cookie);
+        } else {
+            throw new NoSuchRoomException(String.format("Pokój o id '%s' nie istnieje.", roomId));
         }
     }
 
     @Override
-    public String getConfig(String task, String cookie) throws NoSuchUserException {
-        JSONObject config = new JSONObject();
+    public void removeUser(final String cookie) {
+        rooms.forEach(room -> room.removeUser(cookie));
+    }
+
+    @Override
+    public List<Room> getRoomsByCookie(final String cookie) {
+        return rooms.stream()
+                .filter(room -> room.getUserByCookie(cookie).isPresent())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ConfigDTO getConfig(String task, String cookie) throws NoUserCookieFoundException {
+        ConfigDTO configDTO = new ConfigDTO();
         for (Room room : rooms) {
             Optional<User> user = room.getUserByCookie(cookie);
             if (user.isPresent()) {
-                config.put("group", room.getId());
-                config.put("nick", user.get().getNick());
-                config.put("age", user.get().getAge());
+                configDTO.setRoom(room.getId());
+                configDTO.setNick(user.get().getNick());
+                configDTO.setAge(user.get().getAge());
                 try {
-                    config.put("config", room.getTasksConfig().stream().filter(t -> t.getName().equals(task)).findFirst().get().getConfig());
+                    configDTO.setConfig(room.getTasksConfig().stream().filter(t -> t.getName().equals(task)).findFirst().get().getConfig());
                 } catch (Exception e) {
-                    System.out.println("there is no config for " + task);
-                    config.put("config", new ArrayList<>());
+                    configDTO.setConfig(new ArrayList<>());
                 }
-                return config.toString();
+                return configDTO;
             }
         }
-        throw new NoSuchUserException("Nie ma użytkownika z ciastaczkiem = " + cookie);
+        throw new NoUserCookieFoundException();
     }
 
     @Override
-    public String getNextTask(String cookie) throws NoMoreAvailableTasksException, NoSuchUserException {
+    public String getNextTask(String cookie) throws NoMoreAvailableTasksException, NoUserCookieFoundException {
         Optional<Room> roomOptional = rooms.stream().filter(g -> g.getUserByCookie(cookie).isPresent()).findFirst();
         if (!roomOptional.isPresent()) {
-            throw new NoSuchUserException("Nie ma użytkownika z ciasteczkiem = " + cookie);
+            throw new NoUserCookieFoundException();
         }
 
         Room room = roomOptional.get();
         Optional<User> userOptional = room.getUserByCookie(cookie);
         if (!userOptional.isPresent()) {
-            throw new NoSuchUserException("Nie ma użytkownika z ciasteczkiem = " + cookie);
+            throw new NoUserCookieFoundException();
         }
 
         User user = userOptional.get();
@@ -104,6 +117,13 @@ public class RoomService implements IRoomService {
                 .orElse(false);
     }
 
+    public List<String> roomIdsCreatedBy(final String cookie) {
+        return rooms.stream()
+                .filter(room -> room.getCreatorCookie().equals(cookie))
+                .map(Room::getId)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public void removeRoom(String roomId, String cookie) throws CannotRemoveRoomException {
         Optional<Room> room = rooms.stream().filter(g -> g.getId().equals(roomId) && g.getCreatorCookie().equals(cookie)).findAny();
@@ -115,7 +135,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public void addResult(String taskName, String cookie, String nick, String roomId, double result) throws NoSuchRoomException, NoSuchUserException {
+    public void addResult(String taskName, String cookie, String nick, String roomId, double result) throws NoSuchRoomException, NoUserCookieFoundException {
         final Optional<Room> room = this.getRoomById(roomId);
         if (!room.isPresent()) {
             throw new NoSuchRoomException("Nie ma pokoju o id = " + roomId);
@@ -123,7 +143,7 @@ public class RoomService implements IRoomService {
 
         Optional<User> user = room.get().getUserList().stream().filter(u -> u.getNick().equals(nick) && u.getCookieValue().equals(cookie)).findFirst();
         if (!user.isPresent()) {
-            throw new NoSuchUserException("Nie ma użytkownika = " + user + ", z ciasteczkiem = " + cookie);
+            throw new NoUserCookieFoundException();
         }
 
         user.get().addUserResult(result, taskName);
@@ -159,9 +179,9 @@ public class RoomService implements IRoomService {
                 .filteredBy(CharacterPredicates.ASCII_UPPERCASE_LETTERS)
                 .build();
         String roomId;
-        while (containsRoomId(roomId = randomStringGenerator.generate(10))) {
-        }
-
+        do {
+            roomId = randomStringGenerator.generate(4);
+        } while (containsRoomId(roomId));
         return roomId;
     }
 

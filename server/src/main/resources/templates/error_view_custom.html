@@ -11,17 +11,19 @@
 <body>
 
 
-    <div class="container data thumbnail">
+<div class="container data thumbnail">
 
-        <div class="alert alert-danger" style="text-align: center;">
-            <strong>Błąd</strong>: <span th:text="${error}"></span>
-        </div>
-
-        <form action="/" th:align="center">
-            <input class="btn btn-primary" type="submit" value="Dołącz do innej gry"/>
-        </form>
-
+    <div class="alert alert-danger centered">
+        <strong>Błąd</strong>: <span th:text="${error}"></span>
     </div>
+    <div class="centered">
+        <a class="btn btn-primary"
+           th:href="${link}"
+           th:text="${link_name}">
+        </a>
+    </div>
+
+</div>
 
 
 </body>
