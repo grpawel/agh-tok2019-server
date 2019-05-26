@@ -3,7 +3,7 @@
 	"config": [
 		{
 			"name": "lives",
-			"value": 1,
+			"value": 3,
 			"required": true
 		},
 		{
