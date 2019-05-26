@@ -14,13 +14,7 @@
     <div class="container data thumbnail">
 
         <div class="alert alert-danger" style="text-align: center;">
-            <strong>Błąd</strong>
-        </div>
-
-        <div style="white-space: pre-line">
-            <label for="comment">Wiadomość błędu:</label>
-            <textarea rows="5" disabled="true" class="form-control" id="comment" th:text="${error}">
-            </textarea>
+            <strong>Błąd</strong>: <span th:text="${error}"></span>
         </div>
 
         <form action="/" th:align="center">

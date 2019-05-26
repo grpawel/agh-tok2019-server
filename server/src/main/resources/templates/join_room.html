@@ -10,7 +10,15 @@
 </head>
 <body>
 <div class="container data thumbnail">
-    <div style="text-align: center;">
+    <div th:if="${existingGameId != null}" class="centered">
+        <h1>Kontynuuj grę</h1>
+        <a class="btn btn-primary"
+           href="/tasks/new"
+        th:text="${existingGameId}">
+        </a>
+        <p>lub</p>
+    </div>
+    <div class="centered">
         <h1>Dołącz do gry</h1>
         <hr/>
         <h2>Wprowadź niezbędne dane, aby dołączyć do gry:</h2>
@@ -42,8 +50,8 @@
         </div>
 
         <div class="buttons">
-            <input class="btn btn-primary" type="submit" value="Zatwierdź"/>
-            <input class="btn btn-primary" type="reset" value="Zresetuj"/>
+            <input class="btn btn-secondary" type="reset" value="Resetuj"/>
+            <input class="btn btn-primary" type="submit" value="Dołącz"/>
         </div>
     </form>
 </div>

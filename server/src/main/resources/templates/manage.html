@@ -36,9 +36,21 @@
         
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li><a th:text="${room_id}"></a></li>
+                        <li>
+                            <a href="#"
+                               class="dropdown-toggle"
+                               data-toggle="dropdown">
+                                <span th:text="${room_id}"></span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                            <li th:each="owned_room: ${owned_rooms}">
+                                <a th:href="'/manage/' + ${owned_room}" th:text="${owned_room}"></a>
+                            </li>
+                            </ul>
+                        </li>
                         <li><a href="/room/create">Stwórz nowy pokój</a></li>
-                        <li><a id="link" href="/remove">Usuń obecny pokój</a></li>
+                        <li><a id="link" th:href="'/' + ${roomId} + '/remove'">Usuń obecny pokój</a></li>
                     </ul>
                 </div>
         
@@ -54,9 +66,5 @@
         </div>
         
         <p th:text="${room_id}" id="roomID" style="visibility:hidden"/>
-        
-        <script>
-            document.getElementById("link").href = document.getElementById("roomID").innerHTML + "/remove";
-        </script>
     </body>
 </html>

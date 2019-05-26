@@ -69,6 +69,9 @@ public class Room {
         userList.add(new User(name, age, color, cookie, new ArrayList<>(tasks)));
     }
 
+    public void removeUser(final String cookie) {
+        userList.removeIf(user -> user.getCookieValue().equals(cookie));
+    }
 
     public Optional<User> getUserByCookie(String cookie) {
         return userList.stream().filter(u -> u.getCookieValue().equals(cookie)).findFirst();

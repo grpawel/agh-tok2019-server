@@ -5,19 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/input_view.css}"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+          integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
-    <style>
-        body {
-            font-family: Tahoma;
-        }
-
-
-    </style>
 </head>
 <body>
 <div class="container">
-    <div style="text-align: center;">
+    <div class="create-room-heading">
         <h1>Stwórz pokój</h1>
         <hr/>
         <h2>Wprowadź dane niezbędne do stworzenia nowego pokoju:</h2>
@@ -44,47 +39,59 @@
         </div>
         <div class="well">
             <div class="form-check">
-                <label>Wybierz gry</label>
-                <!--    /            <label class="form-check-label">-->
+                <div class="games-container">
+                    <div>
+                        <label>Wybierz gry</label>
+                    </div>
+                    <div class="form-check-select-all">
+                        <input type="checkbox" class="form-check-input-all" id="select-all">
+                        <label class="form-check-label" for="select-all">Zaznacz wszystkie</label>
+                    </div>
+                </div>
                 <div class="row">
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 task-container" th:each="task, stat : *{tasksConfig}">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 task-container"
+                         th:each="task, stat : *{tasksConfig}">
                         <div class="checkboxes">
-                        <input class="form-check-input" type="checkbox"
-                               th:id="'item-' + ${task.name}"
-                               th:field="*{tasksConfig[__${stat.index}__].name}"
-                               th:value="${task.name} + ' '"/>
-                        <!-- add ' ' to avoid checking box by thymeleaf, later trim in code -->
-                        <label class="checkbox-like task-box" th:for="'item-' + ${task.name}">
-                            <h3 th:text="${task.name}"></h3>
-                            <img class="task-thumbnail"
-                                 th:src="'/img/' + ${task.name} + '/img/thumbnail.png'"
-                                 th:alt="${task.name}"
-                                 onerror="this.src='/img/transparent-pixel.png'">
-                        </label>
-                        </div>
-                        <button type="button" class="task-config-button" data-toggle="collapse" th:data-target="'#task-' + ${task.name} + '-config'"  th:if="${task.config !=null}">
-                            Konfiguracja
-                        </button>
-                        <div class="task-config-button-placeholder" th:unless="${task.config !=null}">
-                        </div>
-                        <div th:id="'task-' + ${task.name} + '-config'"
-                             class="task-config-container collapse"
-                             th:object="${task}">
-                            <div class="task-config" th:each="paramConfig, stat_param : *{config}">
-                                <div>
-                                    <label class="task-config-label" th:text="${paramConfig.name}"></label>
-                                    <input test1="test1" type="hidden"
-                                           th:field="${createRoomInput.tasksConfig[__${stat.index}__].config[__${stat_param.index}__].name}"
-                                           th:value="${paramConfig.name}"/>
-                                    <!--  hidden as only way to to pass field -->
-                                    <input test2="test2" type="text" class="form-control" id="value"
-                                           th:field="${createRoomInput.tasksConfig[__${stat.index}__].config[__${stat_param.index}__].value}"/>
+
+                            <!-- add ' ' to avoid checking box by thymeleaf, later trim in code -->
+                            <input class="form-check-input" type="checkbox"
+                                   th:id="'item-' + ${task.name}"
+                                   th:field="*{tasksConfig[__${stat.index}__].name}"
+                                   th:value="${task.name} + ' '"/>
+                            <div class="title-edit">
+                                <label class="title" th:text="${task.name}"
+                                       th:for="'item-' + ${task.name}">
+                                </label>
+                                <div class="task-config-button" data-toggle="collapse"
+                                     th:data-target="'#task-' + ${task.name} + '-config'" th:if="${task.config !=null}">
+                                    <i class="fas fa-pen"></i>
                                 </div>
                             </div>
+                            <label class="checkbox-like task-box" th:for="'item-' + ${task.name}">
+                                <div th:id="'task-' + ${task.name} + '-config'"
+                                     class="task-config-container collapse"
+                                     th:object="${task}">
+                                    <label>Konfiguracja</label>
+                                    <div class="task-config-list-container">
+                                        <div class="task-config" th:each="paramConfig, stat_param : *{config}">
+                                            <label class="task-config-label" th:text="${paramConfig.name}"></label>
+                                            <input test1="test1" type="hidden"
+                                                   th:field="${createRoomInput.tasksConfig[__${stat.index}__].config[__${stat_param.index}__].name}"
+                                                   th:value="${paramConfig.name}"/>
+                                            <!--  hidden as only way to to pass field -->
+                                            <input test2="test2" type="text" class="form-control" id="value"
+                                                   th:field="${createRoomInput.tasksConfig[__${stat.index}__].config[__${stat_param.index}__].value}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img class="task-thumbnail"
+                                     th:src="'/img/' + ${task.name} + '/img/thumbnail.png'"
+                                     th:alt="${task.name}"
+                                     onerror="this.src='/img/transparent-pixel.png'">
+                            </label>
                         </div>
                     </div>
                 </div>
-                <!--                </label>-->
             </div>
         </div>
         <div class="buttons">
@@ -93,5 +100,6 @@
         </div>
     </form>
 </div>
+<script th:src="@{/js/create_room.js}"></script>
 </body>
 </html>
