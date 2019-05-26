@@ -11,6 +11,7 @@
      * @constructor
      * @export
      */
+    document.dist = 0;
     function Runner(outerContainerId, opt_config) {
         // Singleton
         if (Runner.instance_) {
@@ -194,7 +195,6 @@
         HIT: 'offline-sound-hit',
         SCORE: 'offline-sound-reached'
     };
-
 
     /**
      * Key code mapping.
@@ -2009,6 +2009,7 @@
         getActualDistance: function (distance) {
             if((distance ? Math.round(distance * this.config.COEFFICIENT) : 0) % 100 === 0){
                 var event = new CustomEvent('check-win-condition', { 'detail': distance ? Math.round(distance * this.config.COEFFICIENT) : 0 });
+                document.dist = distance ? Math.round(distance * this.config.COEFFICIENT * 100) / 100 : 0;
                 document.dispatchEvent(event);
             }
             return distance ? Math.round(distance * this.config.COEFFICIENT) : 0;
@@ -2023,12 +2024,12 @@
         update: function (deltaTime, distance) {
             var paint = true;
             var playSound = false;
+            document.dist = distance ? Math.round(distance * this.config.COEFFICIENT * 100) / 100 : 0;
 
             if (!this.acheivement) {
                 distance = this.getActualDistance(distance);
                 // Score has gone beyond the initial digit count.
-                if (distance > this.maxScore && this.maxScoreUnits ==
-                    this.config.MAX_DISTANCE_UNITS) {
+                if (distance > this.maxScore && this.maxScoreUnits == this.config.MAX_DISTANCE_UNITS) {
                     this.maxScoreUnits++;
                     this.maxScore = parseInt(this.maxScore + '9');
                 } else {
