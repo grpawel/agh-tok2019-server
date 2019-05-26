@@ -15,9 +15,11 @@ function countTimer() {
     if (seconds < 10) {
         seconds = '0' + seconds;
     }
-    document.getElementById("timer").innerHTML = '00:00' + ":" + seconds + ' s';
     if (totalSeconds < 1) {
+        document.getElementById("timer").innerHTML = '00:00' + ":" + '00 s';
         postScoreJson(postScore_endpoint, 0);
+    } else {
+        document.getElementById("timer").innerHTML = '00:00' + ":" + seconds + ' s';
     }
 }
     
