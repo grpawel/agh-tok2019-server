@@ -45,7 +45,6 @@ public class Room {
             for (int i = 0; i < taskNumber; i++) {
                 resultList.add(tasks.get(0));
             }
-            System.out.println("GENERATED LIST = " + resultList);
             return resultList;
         }
         String currentTask = tasks.remove(random.nextInt(tasks.size()));
@@ -57,7 +56,6 @@ public class Room {
             tasks.add(previousTask);
             previousTask = currentTask;
         }
-        System.out.println("GENERATED LIST = " + resultList);
         return resultList;
     }
 

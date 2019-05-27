@@ -143,7 +143,6 @@ public class InfunController {
     @RequestMapping("/{room_id}/results")
     @ResponseBody
     List<UserResult> getResults(@PathVariable(value = "room_id") final String roomId, @CookieValue("JSESSIONID") String cookie) throws NoSuchRoomException, AccessDeniedException {
-        System.out.println("RESULTS: " + roomService.getResults(roomId, cookie));
         return roomService.getResults(roomId, cookie);
     }
 
