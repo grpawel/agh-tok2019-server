@@ -2,10 +2,10 @@ package pl.edu.agh.toik.infun.model;
 
 import com.google.gson.Gson;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import pl.edu.agh.toik.infun.exceptions.UserAlreadyExistsException;
 import pl.edu.agh.toik.infun.model.requests.TaskConfig;
-import pl.edu.agh.toik.infun.services.RandomColor;
+import pl.edu.agh.toik.infun.services.IRandomColor;
+import pl.edu.agh.toik.infun.services.RandomColorFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,12 +20,7 @@ public class Room {
     private int taskNumber;
     private Gson gson;
     private Random random;
-    private RandomColor randomColor;
-
-    @Autowired
-    public void setRandomColor(final RandomColor randomColor) {
-        this.randomColor = randomColor;
-    }
+    private IRandomColor randomColor;
 
     public Room(String id, List<TaskConfig> tasksConfig, String creatorCookie, int taskNumber) {
         this.random = new Random();
@@ -36,7 +31,7 @@ public class Room {
         this.tasks = createTasksSequence(tasksConfig.stream().map(TaskConfig::getName).collect(Collectors.toList()), taskNumber);
         this.creatorCookie = creatorCookie;
         this.taskNumber = taskNumber;
-        this.randomColor = new RandomColor();
+        this.randomColor = RandomColorFactory.getRandomColor();
     }
 
     private List<String> createTasksSequence(List<String> tasks, int taskNumber) {
@@ -68,7 +63,11 @@ public class Room {
     }
 
     public void removeUser(final String cookie) {
-        userList.removeIf(user -> user.getCookieValue().equals(cookie));
+        getUserByCookie(cookie)
+                .ifPresent(user -> {
+                    userList.remove(user);
+                    randomColor.returnColor(user.getColor());
+                });
     }
 
     public Optional<User> getUserByCookie(String cookie) {
