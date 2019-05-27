@@ -212,7 +212,7 @@ Ball.Game.prototype = {
 			this.totalTimer += this.timer;
 			const points = this.calculatePoints();
 			this.sendResult(points);
-			this.game.state.start('Howto');
+			this.game.state.start('Blank');
 		}
 	},
 	update: function() {
@@ -250,7 +250,7 @@ Ball.Game.prototype = {
 			this.totalTimer += this.timer;
 			const points = this.calculatePoints();
 			this.sendResult(points);
-			this.game.state.start('Howto');
+			this.game.state.start('Blank');
 		}
 		else {
 			this.totalTimer += this.timer;

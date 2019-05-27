@@ -1,37 +1,38 @@
 <html>
-   <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="css/snake.css" type="text/css"/>
-	  <script src="lib/hammer.min.js"></script>
-      <script src="js/game-snake.js"></script>
-      <script type="text/javascript" src="js/adapter-snake.js"></script>
-      <script>main();</script>
-   </head>
-   <body>
-      <div class="pure-g">
-         <div id="instructions" class="content pure-u-1">
-            <h4>Snake - zasady rozgrywki</h4>
-            <ul>
-			   <font size="2">
-               <li>Użyj strzałek lub użyj gestów aby poruszać wężem, zbieraj jedzenie</li>
-               <li>Jeśli uderzysz głową w ścianę, lub swoje ciało, <strong>przegrywasz</strong></li>
-			   <li>Dokonaj ruchu aby rozpocząć rozgrywkę</li>
-			   </font>
-            </ul>
-            <h4>Wynik (maksymalnie 15): <span id="score"></span></h4>
-         </div>
-         <div id="stage" style="position:relative">
-            <div id="buttons" style="position:relative">
-               <button onclick="changeDirection('up', game)", type="button" class="up">&#8250;</button><br>
-               <button onclick="changeDirection('left', game)", type="button" class="left">&#8249;</button>
-               <button onclick="changeDirection('down', game)", type="button" class="down">&#8250;</button>
-               <button onclick="changeDirection('right', game)", type="button" class="right">&#8250;</button>
-            </div>
-         </div>
-         <script type="text/javascript">
-            var game = new Game("stage", "score");
-         </script>
-      </div>
-   </body>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/snake.css" type="text/css"/>
+    <script src="lib/hammer.min.js"></script>
+    <script src="js/game-snake.js"></script>
+    <script type="text/javascript" src="js/adapter-snake.js"></script>
+    <script>main();</script>
+</head>
+<body>
+<div class="pure-g">
+    <div id="instructions" class="content pure-u-1">
+        <h4>Instrukcja:</h4>
+        <ul>
+            <font size="2">
+                <li>Użyj gestów aby poruszać wężem, zbieraj <font color="green">jedzenie</font></li>
+                <li>Jeśli uderzysz głową w ścianę, ciało, lub <font color="red">truciznę</font>
+                    <strong>przegrywasz</strong></li>
+                <li>Dokonaj ruchu aby rozpocząć rozgrywkę</li>
+            </font>
+        </ul>
+        <h4>Wynik:<span id="score"></span></h4>
+    </div>
+    <div id="stage" style="position:relative">
+        <!--            <div id="buttons" style="position:relative">-->
+        <!--               <button onclick="changeDirection('up', game)", type="button" class="up">&#8250;</button><br>-->
+        <!--               <button onclick="changeDirection('left', game)", type="button" class="left">&#8249;</button>-->
+        <!--               <button onclick="changeDirection('down', game)", type="button" class="down">&#8250;</button>-->
+        <!--               <button onclick="changeDirection('right', game)", type="button" class="right">&#8250;</button>-->
+        <!--            </div>-->
+    </div>
+    <script type="text/javascript">
+        var game = new Game("stage", "score");
+    </script>
+</div>
+</body>
 </html>

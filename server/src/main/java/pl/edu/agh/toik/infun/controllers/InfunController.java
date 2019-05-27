@@ -52,6 +52,12 @@ public class InfunController {
             model.addAttribute("existingGameId", joinedRooms.get(0).getId());
         }
         model.addAttribute("joinRoomInput", new JoinRoomInput());
+        try {
+            roomService.getNextTask(cookie);
+            model.addAttribute("allGamesFinished", false);
+        } catch (NoUserCookieFoundException | NoMoreAvailableTasksException e) {
+            model.addAttribute("allGamesFinished", true);
+        }
         return "join_room";
     }
 
@@ -143,7 +149,6 @@ public class InfunController {
     @RequestMapping("/{room_id}/results")
     @ResponseBody
     List<UserResult> getResults(@PathVariable(value = "room_id") final String roomId, @CookieValue("JSESSIONID") String cookie) throws NoSuchRoomException, AccessDeniedException {
-        System.out.println("RESULTS: " + roomService.getResults(roomId, cookie));
         return roomService.getResults(roomId, cookie);
     }
 
@@ -151,5 +156,10 @@ public class InfunController {
     @ResponseBody
     LastResultResponse getLastResults(@CookieValue("JSESSIONID") String cookie) {
         return roomService.getLastResults(cookie);
+    }
+
+    @GetMapping("/qrcode")
+    String getQrCode() {
+        return "qrcode";
     }
 }
