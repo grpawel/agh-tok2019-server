@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="container data thumbnail">
-    <div th:if="${existingGameId != null}" class="centered">
+    <div th:if="${existingGameId != null && !allGamesFinished}" class="centered">
         <h1>Kontynuuj grę</h1>
         <a class="btn btn-primary"
            href="/tasks/new"

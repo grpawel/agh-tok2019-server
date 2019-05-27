@@ -52,6 +52,12 @@ public class InfunController {
             model.addAttribute("existingGameId", joinedRooms.get(0).getId());
         }
         model.addAttribute("joinRoomInput", new JoinRoomInput());
+        try {
+            roomService.getNextTask(cookie);
+            model.addAttribute("allGamesFinished", false);
+        } catch (NoUserCookieFoundException | NoMoreAvailableTasksException e) {
+            model.addAttribute("allGamesFinished", true);
+        }
         return "join_room";
     }
 
