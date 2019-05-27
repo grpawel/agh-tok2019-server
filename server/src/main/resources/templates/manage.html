@@ -24,7 +24,7 @@
                 var data = getData();
                 showRest(data.rest);
             };
-    
+
         </script>
     </head>
     <body>
@@ -33,7 +33,7 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/room/join">InFun</a>
                 </div>
-        
+
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li>
@@ -51,12 +51,13 @@
                         </li>
                         <li><a href="/room/create">Stwórz nowy pokój</a></li>
                         <li><a id="link" th:href="'/' + ${roomId} + '/remove'">Usuń obecny pokój</a></li>
+                        <li><a href="/qrcode">QRCode</a></li>
                     </ul>
                 </div>
-        
+
             </div>
         </nav>
-        
+
         <div class="chart" id="chartContainer" style="width: 90%; height: 500px; padding-left: 5%;"></div>
         <div class="container">
             <ul id="rest-list" class="list-unstyled row">
@@ -64,7 +65,7 @@
             </ul>
 
         </div>
-        
+
         <p th:text="${room_id}" id="roomID" style="visibility:hidden"/>
     </body>
 </html>
