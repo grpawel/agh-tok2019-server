@@ -44,8 +44,8 @@ public class RandomColor implements IRandomColor {
         if (num < colors.size()) {
             return colors.get(num);
         }
-        final int colorIndex = num % colors.size();
-        final int indexDiff = num / colors.size();
+        final int colorIndex = num / colors.size();
+        final int indexDiff = num % colors.size();
         final String color1 = colors.get(colorIndex);
         final String color2 = colors.get((colorIndex + indexDiff) % colors.size());
         return combineColors(color1, color2);
