@@ -34,8 +34,12 @@ public class RandomColor implements IRandomColor {
 
     private final Set<String> usedColors = ConcurrentHashMap.newKeySet();
 
-    public String getColor(final int num) {
-        final String color = nextColor(num);
+    public String getColor(int num) {
+        String color;
+        do {
+            color = nextColor(num);
+            num++;
+        } while(usedColors.contains(color));
         usedColors.add(color);
         return color;
     }
