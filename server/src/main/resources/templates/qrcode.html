@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/qrcode.min.js}"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap4.min.css"/>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" href="css/qrcode.css"/>
+</head>
+<body>
+<div class="container">
+    <div id="edit">
+        <div class="row">
+            <div class="col-6">
+                <div style="text-align: center;">
+                    <h2>Wprowadź niezbędne dane, aby nawiązać połączenie z siecią Wi-Fi.</h2>
+                </div>
+            </div>
+            <div class="col-6">
+                <div style="text-align: center;">
+                    <h2>Wprowadź adres serwera.</h2>
+                </div>
+            </div>
+        </div>
+        <div id="forms" class="row">
+            <div class="col-6">
+                <form id="wifi-form" class="" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="security">Security</label>
+                        <select class="form-control" id="security">
+                            <option>WEP</option>
+                            <option>WPA</option>
+                            <option>WPA2</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ssid">SSID</label>
+                        <input type="text" class="form-control" id="ssid" aria-describedby="emailHelp"
+                               placeholder="SSID">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password">
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-6">
+                <form id="address-form" class="" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="address">Server address</label>
+                        <input type="text" class="form-control" id="address" placeholder="Server address">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row text-center">
+            <button type="submit" onclick="generateCodes()" class="btn btn-primary">Generuj kody
+            </button>
+        </div>
+    </div>
+    <div id="generated" style="display: none">
+        <div id="codes" class="row">
+            <div class="col-6">
+                <div style="text-align: center;">
+                    <h1>Wi-Fi</h1>
+                </div>
+                <div id="qrcode-wifi" class="text-center"></div>
+
+            </div>
+            <div class="col-6">
+                <div style="text-align: center;">
+                    <h1>Adres serwera</h1>
+                </div>
+                <div id="qrcode-address"  class="text-center" ></div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <button type="submit" onclick="editCodes()" class="btn btn-primary">Edytuj kody</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function generateCodes() {
+        document.getElementById("edit").style.display = "none";
+        document.getElementById("generated").style.display = "block";
+        showWifiCode();
+        showServerCode();
+    }
+
+    function editCodes() {
+        document.getElementById("edit").style.display = "block";
+        document.getElementById("generated").style.display = "none";
+    }
+
+    function showWifiCode() {
+        var form = document.getElementById("wifi-form");
+        var security = form.security.value;
+        var escape = function (s) {
+            return s.replace(/([^0-9a-zA-Z])/g, "\\$1");
+        };
+        var escapedSsid = escape(form.ssid.value);
+        var escapedPass = escape(form.password.value);
+        var qrtext = "WIFI:S:" + escapedSsid + ";T:" + security + ";P:" + escapedPass + ";;";
+
+        showCode("qrcode-wifi", qrtext);
+    }
+
+    function showServerCode() {
+        var form = document.getElementById("address-form");
+        var address = form.address.value;
+        showCode("qrcode-address", address);
+    }
+
+    function showCode(elementId, text) {
+        var element = document.getElementById(elementId);
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+        element.style.paddingLeft = document.documentElement.clientWidth * 0.025 + 'px';
+        new QRCode(document.getElementById(elementId), {
+            text: text,
+            width: document.documentElement.clientWidth * 0.3,
+            height: document.documentElement.clientWidth * 0.3
+        });
+    }
+</script>
+</body>
+</html>

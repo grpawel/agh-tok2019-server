@@ -152,4 +152,9 @@ public class InfunController {
     LastResultResponse getLastResults(@CookieValue("JSESSIONID") String cookie) {
         return roomService.getLastResults(cookie);
     }
+
+    @GetMapping("/qrcode")
+    String getQrCode() {
+        return "qrcode";
+    }
 }
