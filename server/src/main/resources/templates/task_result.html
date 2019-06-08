@@ -33,17 +33,15 @@
         #user_color_bar {
             height: 100%;
         }
+        #scores-table {
+            max-width: 500px;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-
-    <div class="alert alert-success" style="text-align: center;">
-        <strong>SUKCES</strong>
-    </div>
-
-    <dl class="dl-table">
+<div class="container center-contents">
+    <dl id="scores-table" class="dl-table">
         <dt>Wynik ostatniej gry:</dt>
         <dd><span id="score-last-game"></span></dd>
         <dt>Całkowity wynik:</dt>
@@ -54,7 +52,7 @@
         <dd><div id="user_color_bar"></div></dd>
     </dl>
 
-    <form action="/tasks/new" th:align="center">
+    <form action="/tasks/new">
         <input class="btn btn-primary button-big" type="submit" value="Zacznij nowe zadanie"/>
     </form>
 
