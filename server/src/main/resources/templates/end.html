@@ -9,24 +9,15 @@
     <script th:src="@{/js/bootstrap.min.js}"></script>
 </head>
 <body>
+    <div class="container center-contents">
+        <h1>Koniec gry</h1>
+        <p>Skończyłeś już wszystkie zadania!</p>
+        <p>Twój wynik: <strong><span th:text="${result}"></span></strong></p>
 
-    <div class="container data thumbnail">
 
-        <div class="alert alert-success" style="text-align: center;">
-            <strong>SUKCES</strong>
-        </div>
-
-        <div style="white-space: pre-line">
-            <label for="comment">Wynik:</label>
-
-            <textarea rows="5" disabled="true" class="form-control" id="comment" th:text="${result}">
-            </textarea>
-        </div>
-
-        <form action="/room/join" th:align="center">
-            <input class="btn btn-primary" type="submit" value="Dołącz do innej gry"/>
-        </form>
-
+    <form action="/room/join" th:align="center">
+        <input class="btn btn-primary" type="submit" value="Dołącz do innej gry"/>
+    </form>
     </div>
 
 </body>

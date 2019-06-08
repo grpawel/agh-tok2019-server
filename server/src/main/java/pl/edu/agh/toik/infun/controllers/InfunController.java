@@ -136,7 +136,7 @@ public class InfunController {
 
     @GetMapping(value = "/end")
     String end(@CookieValue("JSESSIONID") String cookie, Model model) {
-        model.addAttribute("result", "Udało Ci się skończyć wszystkie zadania. \nCałkowity rezultat = " + roomService.getLastResults(cookie).getScore());
+        model.addAttribute("result", roomService.getLastResults(cookie).getScore());
         return "end";
     }
 
