@@ -31,7 +31,7 @@
     </script>
     <style>
         #user_color_bar {
-            height: 50px;
+            height: 100%;
         }
     </style>
 </head>
@@ -50,9 +50,9 @@
         <dd><span id="score-total"></span></dd>
         <dt>Twoje miejsce:</dt>
         <dd><span id="ranking-place"></span></dd>
+        <dt>Twój kolor:</dt>
+        <dd><div id="user_color_bar"></div></dd>
     </dl>
-    <h2>Znajdź swój kolor w tabeli wyników!</h2>
-    <div id="user_color_bar"></div>
 
     <form action="/tasks/new" th:align="center">
         <input class="btn btn-primary button-big" type="submit" value="Zacznij nowe zadanie"/>
