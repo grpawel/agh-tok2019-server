@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
 import pl.edu.agh.toik.infun.exceptions.*;
 import pl.edu.agh.toik.infun.model.ConfigDTO;
 import pl.edu.agh.toik.infun.model.Room;
@@ -16,6 +17,9 @@ import pl.edu.agh.toik.infun.model.requests.TaskConfig;
 import pl.edu.agh.toik.infun.services.IFolderScanService;
 import pl.edu.agh.toik.infun.services.IRoomService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -24,7 +28,6 @@ import java.util.stream.Collectors;
 
 
 @Controller
-//todo hide all functions body to service
 public class InfunController {
 
     @Autowired
@@ -38,8 +41,8 @@ public class InfunController {
         return "redirect:/room/join";
     }
 
-    @RequestMapping("/room/create")
-    String createRoom(Model model, @CookieValue("JSESSIONID") String cookie) {
+    @GetMapping("/room/create")
+    String createRoom(Model model) {
         CreateRoomInput createRoomInput = new CreateRoomInput(roomService.createDefaultTasksConfig(
                 folderScanService.scanFolder())
         );
@@ -48,14 +51,31 @@ public class InfunController {
     }
 
     @GetMapping(value = "/room/join")
-    String joinRoom(Model model, @CookieValue("JSESSIONID") String cookie) {
-        final List<Room> joinedRooms = roomService.getRoomsByCookie(cookie);
+    String joinRoom(HttpServletRequest request, HttpServletResponse response, Model model) {
+        Cookie cookie = null;
+        if(request!=null){
+            Cookie[] requestCookies = request.getCookies();
+            if(requestCookies!=null){
+                for (Cookie c : requestCookies) {
+                    if (c.getName().equals("COOKIE")) {
+                        cookie = c;
+                    }
+                }
+            }
+        }
+        if(cookie == null){
+            cookie = new Cookie("COOKIE", String.valueOf(RequestContextHolder.currentRequestAttributes().getSessionId()));
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        }
+
+        final List<Room> joinedRooms = roomService.getRoomsByCookie(cookie.getValue());
         if (!joinedRooms.isEmpty()) {
             model.addAttribute("existingGameId", joinedRooms.get(0).getId());
         }
         model.addAttribute("joinRoomInput", new JoinRoomInput());
         try {
-            roomService.getNextTask(cookie);
+            roomService.getNextTask(cookie.getValue());
             model.addAttribute("allGamesFinished", false);
         } catch (NoUserCookieFoundException | NoMoreAvailableTasksException e) {
             model.addAttribute("allGamesFinished", true);
@@ -64,22 +84,62 @@ public class InfunController {
     }
 
     @PostMapping(value = "/room/join")
-    String getTask(@ModelAttribute JoinRoomInput joinRoomInput, @CookieValue("JSESSIONID") String cookie, Model model) throws UserAlreadyExistsException, NoSuchRoomException {
+    String getTask(@ModelAttribute JoinRoomInput joinRoomInput, @CookieValue("COOKIE") String cookie, Model model) throws UserAlreadyExistsException, NoSuchRoomException {
         roomService.removeUser(cookie);
         roomService.addUser(joinRoomInput.nick, joinRoomInput.age, joinRoomInput.roomId, cookie);
         return "redirect:/tasks/new";
     }
 
     @GetMapping("/tasks/new")
-    public String getNextTask(@CookieValue("JSESSIONID") String cookie) throws NoUserCookieFoundException {
+    public String getNextTask(HttpServletRequest request, HttpServletResponse response, @CookieValue("COOKIE") String cookie) throws NoUserCookieFoundException {
         try {
-            return roomService.getNextTask(cookie) + "/index";
+            String nextTask = roomService.getNextTask(cookie);
+            String ip = InetAddress.getLocalHost().getHostAddress();
+            if (nextTask.equals("robot")) {
+                return "redirect:http://" + ip + ":8082/tasks/robot?cookie=" + cookie;
+            }
+            return "redirect:https://" + ip + ":8443/tasks/normal?cookie=" + cookie;
         } catch (NoMoreAvailableTasksException e) {
-            return "redirect:/end";
+            return "redirect:/room/join";
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            return "redirect:/room/join";
         }
     }
 
-    @RequestMapping("/manage")
+    @GetMapping("/tasks/robot")
+    public String robotGame(HttpServletResponse response, @RequestParam String cookie) {
+        Cookie newCookie = new Cookie("COOKIE", cookie);
+        newCookie.setPath("/");
+        response.addCookie(newCookie);
+        try {
+            String nextTask =  roomService.getNextTask(cookie);
+            if(nextTask.equals("robot")){
+                return "robot/index";
+            }
+        } catch (NoUserCookieFoundException | NoMoreAvailableTasksException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/room/join";
+    }
+
+    @GetMapping("/tasks/normal")
+    public String normalGame(HttpServletResponse response, @RequestParam String cookie) {
+        Cookie newCookie = new Cookie("COOKIE", cookie);
+        newCookie.setPath("/");
+        response.addCookie(newCookie);
+        try {
+            String nextTask =  roomService.getNextTask(cookie);
+            if(!nextTask.equals("robot")){
+                return nextTask + "/index";
+            }
+        } catch (NoUserCookieFoundException | NoMoreAvailableTasksException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/room/join";
+    }
+
+    @PostMapping("/manage")
     String manage(@ModelAttribute("createRoomInput") CreateRoomInput createRoomInput, @CookieValue("JSESSIONID") String cookie, Model model) throws RoomAlreadyExistsException, NoGameSelectedException {
         List<TaskConfig> userChoice = createRoomInput.getTasksConfig();
         String roomId = createRoomInput.getRoomId();
@@ -118,26 +178,26 @@ public class InfunController {
 
     @RequestMapping(value = "/{task_name}/config")
     @ResponseBody
-    ConfigDTO getConfig(@PathVariable(value = "task_name") final String taskName, @CookieValue("JSESSIONID") String cookie) throws NoUserCookieFoundException {
+    ConfigDTO getConfig(@PathVariable(value = "task_name") final String taskName, @CookieValue("COOKIE") String cookie) throws NoUserCookieFoundException {
         return roomService.getConfig(taskName, cookie);
     }
 
 
     @PostMapping(value = "/{task_name}/end")
     @ResponseBody
-    public String endGame(@PathVariable(value = "task_name") final String taskName, @RequestBody TaskResult taskResult, @CookieValue("JSESSIONID") String cookie, Model model) throws NoSuchRoomException, NoUserCookieFoundException {
+    public String endGame(@PathVariable(value = "task_name") final String taskName, @RequestBody TaskResult taskResult, @CookieValue("COOKIE") String cookie, Model model) throws NoSuchRoomException, NoUserCookieFoundException {
         roomService.addResult(taskName, cookie, taskResult.getNick(), taskResult.getRoom(), taskResult.getResult());
         model.addAttribute("result", taskResult);
         return "/task_result";
     }
 
     @GetMapping(value = "/task_result")
-    String taskResult(@CookieValue("JSESSIONID") String cookie, Model model) {
+    String taskResult(@CookieValue("COOKIE") String cookie, Model model) {
         return "task_result";
     }
 
     @GetMapping(value = "/end")
-    String end(@CookieValue("JSESSIONID") String cookie, Model model) {
+    String end(@CookieValue("COOKIE") String cookie, Model model) {
         model.addAttribute("result", roomService.getLastResults(cookie).getScore());
         return "end";
     }
@@ -156,7 +216,7 @@ public class InfunController {
 
     @RequestMapping("/last/results")
     @ResponseBody
-    LastResultResponse getLastResults(@CookieValue("JSESSIONID") String cookie) {
+    LastResultResponse getLastResults(@CookieValue("COOKIE") String cookie) {
         return roomService.getLastResults(cookie);
     }
 
