@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/style-piano.css">
+    <script src="lib/jquery-3.4.1.min.js"></script>
+    <title>Piano Tiles</title>
+</head>
+<body>
+<div style="display: flex; justify-content: center; align-content: center; padding-top: 30px;">
+    <span class="score" style="font-size: 30px; color: white">100</span>
+</div>
+
+<div class="modal-background">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title">Instrukcja</span>
+        </div>
+        <div class="modal-content">
+            <span class="padding-top padding-bottom">Klikaj w czarne płytki, kliknięcie w pusty tor kończy grę. Gra kończy się również,
+            gdy płytka dolnej krawędzi toru. Maksymalny wynik to 100 płytek.</span>
+        </div>
+        <div class="modal-footer">
+            <button class="ok-button">OK</button>
+        </div>
+    </div>
+</div>
+
+<div class="flex-wrapper">
+    <div class="lane-wrapper">
+        <div id="lane0" class="lane"></div>
+        <div id="lane1" class="lane"></div>
+        <div id="lane2" class="lane"></div>
+        <div id="lane3" class="lane"></div>
+    </div>
+    <div class="button">
+        <span id="startbutton">START</span>
+    </div>
+</div>
+
+<script>
+    var xhr = new XMLHttpRequest();
+    var config = {age: 14};
+    xhr.open('GET', '/pianotiles/config', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            var json = xhr.responseText;
+            config = JSON.parse(json);
+        }
+    };
+    xhr.send(null);
+
+    function sendResult(score) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/pianotiles/end', true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        //send result to server
+        xhr.send(JSON.stringify({result: score, group: config.group, nick: config.nick, age: config.age}));
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                window.location.replace(xhr.responseText);
+            }
+        }
+    }
+</script>
+<script src="js/game-piano.js"></script>
+
+</body>
+</html>

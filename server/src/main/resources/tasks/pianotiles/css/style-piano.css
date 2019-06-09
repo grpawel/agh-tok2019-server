@@ -1,0 +1,134 @@
+.modal-background {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal {
+    margin: 15% auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 400px;
+}
+
+.modal-header {
+    display: flex;
+    padding: 10px;
+}
+
+.modal-title {
+    flex-grow: 3;
+    font-size: 25px;
+    font-family: Calibri, serif;
+    font-weight: bold;
+}
+
+.modal-content {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: Calibri, serif;
+    font-size: 17px;
+    padding: 10px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.input-invalid {
+    border: 1px solid red !important;
+}
+
+.age-input {
+    height: 50px;
+    font-size: 25px;
+    border-radius: 3px;
+    border: gray 1px solid;
+    padding-left: 10px;
+}
+
+.ok-button {
+    height: 50px;
+    font-size: 15px;
+    width: 100%;
+    border-radius: 3px;
+    color: white;
+    border: 1px solid #2160bf;
+    background-color: #1f4e9c;
+}
+
+.ok-button:hover {
+    background-color: #1b4283;
+}
+
+.padding-top {
+    padding-top: 10px;
+}
+
+.padding-bottom {
+   padding-bottom: 10px;
+}
+
+.flex-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+    width: 100%;
+    height: 800px;
+    align-items: center;
+    justify-content: center;
+}
+
+.lane-wrapper {
+    display: flex;
+    width: 450px;
+    height: 80%;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    color: white;
+    font-size: 30px;
+}
+
+@media only screen and (max-width: 500px) {
+    .flex-wrapper {
+        height: 550px;
+    }
+
+    .lane-wrapper {
+        width: 90%;
+    }
+
+    .modal {
+        width: 80%;
+    }
+}
+
+.lane {
+    border: 1px white solid;
+    width: 25%;
+    position: relative;
+}
+
+
+
+body {
+    background: #36D1DC; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #5B86E5, #36D1DC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}

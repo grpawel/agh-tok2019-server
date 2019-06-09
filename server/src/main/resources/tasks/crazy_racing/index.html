@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Crazy Racing</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<script type="text/javascript" src="./lib/lufylegend-1.9.7.simple.min.js"></script>
+	<script type="text/javascript" src="./js/ytMain.js"></script>
+</head>
+<script>
+    var xhr = new XMLHttpRequest();
+    var config = {age: 20};
+    xhr.open('GET', '/crazy_racing/config', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            var json = xhr.responseText;
+            config = JSON.parse(json);
+        }
+    };
+    xhr.send(null);
+    function sendResult(score) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/crazy_racing/end', true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        //send result to server
+        xhr.send(JSON.stringify({result: score, group: config.group, nick: config.nick, age: config.age}));
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                window.location.replace(xhr.responseText);
+            }
+        }
+    }
+</script>
+
+<body>
+	<div id="mylegend">Loading……</div>
+</body>
+</html>
