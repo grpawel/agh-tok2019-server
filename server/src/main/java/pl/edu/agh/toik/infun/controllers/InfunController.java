@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.util.WebUtils;
 import pl.edu.agh.toik.infun.exceptions.*;
 import pl.edu.agh.toik.infun.model.ConfigDTO;
 import pl.edu.agh.toik.infun.model.Room;
@@ -20,12 +21,11 @@ import pl.edu.agh.toik.infun.services.IRoomService;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static pl.edu.agh.toik.infun.utils.InFunUtils.*;
 
 @Controller
 public class InfunController {
@@ -42,7 +42,10 @@ public class InfunController {
     }
 
     @GetMapping("/room/create")
-    String createRoom(Model model) {
+    String createRoom(HttpServletRequest request, Model model) {
+        if(isLocalhost(request.getLocalAddr())){
+            return redirectToHttps("/room/create");
+        }
         CreateRoomInput createRoomInput = new CreateRoomInput(roomService.createDefaultTasksConfig(
                 folderScanService.scanFolder())
         );
@@ -52,17 +55,11 @@ public class InfunController {
 
     @GetMapping(value = "/room/join")
     String joinRoom(HttpServletRequest request, HttpServletResponse response, Model model) {
-        Cookie cookie = null;
-        if(request!=null){
-            Cookie[] requestCookies = request.getCookies();
-            if(requestCookies!=null){
-                for (Cookie c : requestCookies) {
-                    if (c.getName().equals("COOKIE")) {
-                        cookie = c;
-                    }
-                }
-            }
+        if(isLocalhost(request.getLocalAddr())){
+            return redirectToHttps("/room/join");
         }
+        Cookie cookie = WebUtils.getCookie(request, "COOKIE");
+
         if(cookie == null){
             cookie = new Cookie("COOKIE", String.valueOf(RequestContextHolder.currentRequestAttributes().getSessionId()));
             cookie.setPath("/");
@@ -91,52 +88,34 @@ public class InfunController {
     }
 
     @GetMapping("/tasks/new")
-    public String getNextTask(HttpServletRequest request, HttpServletResponse response, @CookieValue("COOKIE") String cookie) throws NoUserCookieFoundException {
+    public String getNextTask(@CookieValue("COOKIE") String cookie) throws NoUserCookieFoundException {
         try {
             String nextTask = roomService.getNextTask(cookie);
-            String ip = InetAddress.getLocalHost().getHostAddress();
             if (nextTask.equals("robot")) {
-                return "redirect:http://" + ip + ":8082/tasks/robot?cookie=" + cookie;
+                return redirectToHttp("/tasks/next?type=robot");
             }
-            return "redirect:https://" + ip + ":8443/tasks/normal?cookie=" + cookie;
+            return redirectToHttps("/tasks/next?type=normal");
         } catch (NoMoreAvailableTasksException e) {
-            return "redirect:/room/join";
-        } catch (UnknownHostException e) {
             e.printStackTrace();
-            return "redirect:/room/join";
+            return "redirect:/end";
         }
     }
 
-    @GetMapping("/tasks/robot")
-    public String robotGame(HttpServletResponse response, @RequestParam String cookie) {
-        Cookie newCookie = new Cookie("COOKIE", cookie);
-        newCookie.setPath("/");
-        response.addCookie(newCookie);
+    @GetMapping("/tasks/next")
+    public String robotGame(@CookieValue("COOKIE") String cookie, @RequestParam String type) throws NoUserCookieFoundException{
         try {
             String nextTask =  roomService.getNextTask(cookie);
-            if(nextTask.equals("robot")){
+            if(nextTask.equals("robot") && type.equals("robot")){
                 return "robot/index";
-            }
-        } catch (NoUserCookieFoundException | NoMoreAvailableTasksException e) {
-            e.printStackTrace();
-        }
-        return "redirect:/room/join";
-    }
-
-    @GetMapping("/tasks/normal")
-    public String normalGame(HttpServletResponse response, @RequestParam String cookie) {
-        Cookie newCookie = new Cookie("COOKIE", cookie);
-        newCookie.setPath("/");
-        response.addCookie(newCookie);
-        try {
-            String nextTask =  roomService.getNextTask(cookie);
-            if(!nextTask.equals("robot")){
+            } else if(type.equals("normal")) {
                 return nextTask + "/index";
             }
-        } catch (NoUserCookieFoundException | NoMoreAvailableTasksException e) {
+        } catch (NoMoreAvailableTasksException e) {
             e.printStackTrace();
+            return "redirect:/end";
         }
         return "redirect:/room/join";
+
     }
 
     @PostMapping("/manage")
