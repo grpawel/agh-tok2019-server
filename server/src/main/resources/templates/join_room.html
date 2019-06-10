@@ -10,10 +10,10 @@
     <script th:src="@{/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<div class="container data thumbnail">
+<div class="container">
     <div th:if="${existingGameId != null && !allGamesFinished}" class="centered">
         <h1>Kontynuuj grę</h1>
-        <a class="btn btn-primary"
+        <a class="btn btn-primary button-big"
            href="/tasks/new"
         th:text="${existingGameId}">
         </a>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="buttons">
-            <input class="btn btn-primary" type="submit" value="Dołącz"/>
+            <input class="btn btn-primary button-big" type="submit" value="Dołącz"/>
         </div>
     </form>
 </div>
