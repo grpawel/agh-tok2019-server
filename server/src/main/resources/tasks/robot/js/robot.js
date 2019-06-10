@@ -33,7 +33,7 @@ xhr.onreadystatechange = function() {
         config.forEach(parameter =>{
             if(parameter.name === 'port')
                 port = parameter.value;
-            else if(parameter.name === 'ip')
+            else if(parameter.name === 'ip' && parameter.value.trim() !== "")
                 ip = parameter.value;
             else if(parameter.name === 'time')
                 time = parameter.value;

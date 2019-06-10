@@ -3,7 +3,7 @@
 	"config": [
 		{
 			"name": "ip",
-			"value": "127.0.0.1",
+			"value": "",
 			"required": false
 		},
 		{
