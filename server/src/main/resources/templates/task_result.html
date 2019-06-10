@@ -10,18 +10,16 @@
     <script th:src="@{/js/bootstrap.min.js}"></script>
 
     <script>
-        var xhr = new XMLHttpRequest();
-        var score = 0.0;
-        var lastResult = 0.0;
+        const xhr = new XMLHttpRequest();
         xhr.open('GET', '/last/results', true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState == XMLHttpRequest.DONE) {
-                var json = xhr.responseText;
-                obj = JSON.parse(json);
-                score = obj['score'].toFixed(2);
-                lastResult = obj['lastResult'].toFixed(2);
-                rank =  obj['rank'];
-                color = obj['color'];
+                const json = xhr.responseText;
+                const obj = JSON.parse(json);
+                const score = obj['score'].toFixed(2);
+                const lastResult = obj['lastResult'].toFixed(2);
+                const rank =  obj['rank'];
+                const color = obj['color'];
                 document.getElementById('score-last-game').innerText = lastResult;
                 document.getElementById('score-total').innerText = score;
                 document.getElementById('ranking-place').innerText = rank;
