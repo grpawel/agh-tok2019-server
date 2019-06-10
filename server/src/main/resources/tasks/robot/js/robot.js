@@ -13,7 +13,6 @@ function endFun() {
     xhr.send(JSON.stringify({result: percentage, group: group, nick: nick, age: age}));
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
-            <!--window.alert(xhr.responseText);-->
             window.location.replace(xhr.responseText);
         }
     }
@@ -61,9 +60,11 @@ $(function() {
     });
 });
 
-setInterval( function() {
+intervalId = setInterval( function() {
     if(Date.now() - timestamp > (time*1000)) {
+        clearInterval(intervalId);
         endFun();
+        return;
     }
     $.getJSON("http://" + ip + ":" + port + '/control_robot', {
         direction: direction_now,
@@ -74,6 +75,7 @@ setInterval( function() {
     function( data ) {
         document.body.style.backgroundColor = data.color;
         if (data.endgame == '1') {
+            clearInterval(intervalId);
             endFun();
         }
     });
