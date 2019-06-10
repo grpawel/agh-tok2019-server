@@ -31,9 +31,11 @@ xhr.onreadystatechange = function() {
         var config = obj['config'];
         console.log(obj);
         config.forEach(parameter =>{
-            if(parameter.name == 'port')
+            if(parameter.name === 'port')
                 port = parameter.value;
-            else if(parameter.name == 'time')
+            else if(parameter.name === 'ip' && parameter.value.trim() !== "")
+                ip = parameter.value;
+            else if(parameter.name === 'time')
                 time = parameter.value;
         });
         console.log(port);

@@ -2,6 +2,11 @@
 	"name": "robot",
 	"config": [
 		{
+			"name": "ip",
+			"value": "",
+			"required": false
+		},
+		{
 			"name": "port",
 			"value": 5000,
 			"required": true
