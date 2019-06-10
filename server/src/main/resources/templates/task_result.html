@@ -3,6 +3,7 @@
 <head>
     <title>InFUN</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/input_view.css}"/>
     <script th:src="@{/js/jquery.min.js}"></script>
@@ -21,10 +22,9 @@
                 lastResult = obj['lastResult'].toFixed(2);
                 rank =  obj['rank'];
                 color = obj['color'];
-                document.getElementById("comment").value = 'Ostatni wynik = '
-                    + lastResult + '\nCałkowity wynik = '
-                    + score +'\nTwoje miejsce = ' + rank ;
-
+                document.getElementById('score-last-game').innerText = lastResult;
+                document.getElementById('score-total').innerText = score;
+                document.getElementById('ranking-place').innerText = rank;
                 document.getElementById("user_color_bar").style = "background-color: " + color + ";";
             }
         }
@@ -32,29 +32,29 @@
     </script>
     <style>
         #user_color_bar {
-            height: 50px;
+            height: 100%;
+        }
+        #scores-table {
+            max-width: 500px;
         }
     </style>
 </head>
 <body>
 
-<div class="container data thumbnail">
+<div class="container center-contents">
+    <dl id="scores-table" class="dl-table">
+        <dt>Wynik ostatniej gry:</dt>
+        <dd><span id="score-last-game"></span></dd>
+        <dt>Całkowity wynik:</dt>
+        <dd><span id="score-total"></span></dd>
+        <dt>Twoje miejsce:</dt>
+        <dd><span id="ranking-place"></span></dd>
+        <dt>Twój kolor:</dt>
+        <dd><div id="user_color_bar"></div></dd>
+    </dl>
 
-    <div class="alert alert-success" style="text-align: center;">
-        <strong>SUKCES</strong>
-    </div>
-
-    <div style="white-space: pre-line">
-        <label for="comment">Wynik:</label>
-
-        <textarea rows="5" disabled="true" class="form-control" id="comment" th:text="${result}">
-            </textarea>
-        <h2>Znajdź swój kolor w tabeli wyników!</h2>
-        <div id="user_color_bar"></div>
-    </div>
-
-    <form action="/tasks/new" th:align="center">
-        <input class="btn btn-primary" type="submit" value="Zacznij nowe zadanie"/>
+    <form action="/tasks/new">
+        <input class="btn btn-primary button-big" type="submit" value="Kontynuuj"/>
     </form>
 
 </div>

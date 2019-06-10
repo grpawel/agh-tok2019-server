@@ -3,6 +3,7 @@
 <head>
     <title>InFun - error</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/input_view.css}"/>
     <script th:src="@{/js/jquery.min.js}"></script>
@@ -17,7 +18,7 @@
         <strong>Błąd</strong>: <span th:text="${error}"></span>
     </div>
     <div class="centered">
-        <a class="btn btn-primary"
+        <a class="btn btn-primary button-big"
            th:href="${link}"
            th:text="${link_name}">
         </a>

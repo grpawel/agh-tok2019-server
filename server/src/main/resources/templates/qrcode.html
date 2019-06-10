@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/qrcode.min.js}"></script>
 
@@ -28,7 +29,7 @@
             <div class="col-6">
                 <form id="wifi-form" class="" onsubmit="return false;">
                     <div class="form-group">
-                        <label for="security">Security</label>
+                        <label for="security">Zabezpieczenia</label>
                         <select class="form-control" id="security">
                             <option>WEP</option>
                             <option>WPA</option>
@@ -41,8 +42,8 @@
                                placeholder="SSID" th:value="${ssid}">
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="text" class="form-control" id="password" placeholder="Password" th:value="${password}">
+                        <label for="password">Hasło</label>
+                        <input type="text" class="form-control" id="password" placeholder="Hasło" th:value="${password}">
                     </div>
 
                 </form>
@@ -50,8 +51,8 @@
             <div class="col-6">
                 <form id="address-form" class="" onsubmit="return false;">
                     <div class="form-group">
-                        <label for="address">Server address</label>
-                        <input type="text" class="form-control" id="address" placeholder="Server address" th:value="${address}">
+                        <label for="address">Adres serwera</label>
+                        <input type="text" class="form-control" id="address" placeholder="Adres serwera" th:value="${address}">
                     </div>
                 </form>
             </div>

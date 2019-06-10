@@ -3,30 +3,22 @@
 <head>
     <title>InFUN</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/input_view.css}"/>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
 </head>
 <body>
+    <div class="container center-contents">
+        <h1>Koniec gry</h1>
+        <p>Skończyłeś już wszystkie zadania!</p>
+        <p>Twój wynik: <strong><span th:text="${result}"></span></strong></p>
 
-    <div class="container data thumbnail">
 
-        <div class="alert alert-success" style="text-align: center;">
-            <strong>SUKCES</strong>
-        </div>
-
-        <div style="white-space: pre-line">
-            <label for="comment">Wynik:</label>
-
-            <textarea rows="5" disabled="true" class="form-control" id="comment" th:text="${result}">
-            </textarea>
-        </div>
-
-        <form action="/room/join" th:align="center">
-            <input class="btn btn-primary" type="submit" value="Dołącz do innej gry"/>
-        </form>
-
+    <form action="/room/join" th:align="center">
+        <input class="btn btn-primary button-big" type="submit" value="Dołącz do innej gry"/>
+    </form>
     </div>
 
 </body>
