@@ -157,6 +157,7 @@ form {
 .button-big {
     width: 100%;
     height: 4em;
+    max-width: 500px;
 }
 
 .dl-table {
