@@ -156,3 +156,15 @@ function pointInBox(x, y, box) {
 function boardPositionsMatch(a, b) {
     return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
 }
+var counter = 60;
+
+const timer = function() {
+    var timer = document.querySelector('#time');
+    setInterval(function(){
+        if(counter === 0){
+            sendResult(0);
+        }
+        timer.innerHTML = 'Pozostały czas: ' + (counter >0 ? String(counter) : 0);
+        counter -= 1;
+    },1000);
+};

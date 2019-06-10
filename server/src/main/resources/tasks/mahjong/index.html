@@ -5,6 +5,7 @@
 </head>
 
 <body>
+<div style="display: flex; justify-content: center; flex-direction: column; align-items: center; margin-top:20px; font-size: 2vw;" id="time"></div>
     <!-- Scripts, so many scripts -->
     <script>
         var xhr = new XMLHttpRequest();
@@ -57,9 +58,9 @@
         // Interface
         var menu_interface = new Interface(ctx);
         menu_interface.addButton(new Button({x: 250, y:400, width: 300, height: 80}, 'Start', function() {
-            console.log('Start clicked'); 
-
-            // Init tile deck
+            console.log('Start clicked');
+            timer();
+           // Init tile deck
             var deck = new TileDeck();
             deck.init(true);
 
@@ -143,8 +144,17 @@
                     game.reactClick(mousePos.x, mousePos.y);
                     game.draw();
 
-                    if (game.no_more_moves && !game.no_more_tiles) { console.log('LOST'); sendResult(0);}
-                    else if (game.no_more_moves)                   { console.log('WON'); sendResult(1);}
+                    if (game.no_more_moves && !game.no_more_tiles) { console.log('LOST'); sendResult(0.25);}
+                    else if (game.no_more_moves)                   {
+                        if(counter >= 30) {
+                            console.log('WON'); sendResult(1);
+                        }
+                        else if(counter <= 0){
+                            console.log('WON'); sendResult(0.25);
+                        } else {
+                            console.log('WON'); sendResult((0.025 * counter + 0.25).toFixed(2));
+                    }
+            };
 
                     break;
                 case LOSE:
@@ -204,10 +214,10 @@
     <p style="margin: auto; text-align: center; padding: 30px; font-size: 24px; font-family: Tahoma">
     Wybierz parę jednakowych płytek z planszy do usunięcia. Płytki nie mogą być blokowane z góry ani wzdłuż dłuższych boków.
     </p>
-    <canvas id="canvas" width="800" height="1000" style="border:2px solid #d3d3d3;">
+    <canvas id="canvas" width="800" height="1000" style="border:2px solid #d3d3d3;">z
     Your browser does not support the HTML5 canvas tag.
     </canvas>
-    
+
     <!-- Centering canvas both vertically and horizontally -->
     <style> 
     #canvas {
