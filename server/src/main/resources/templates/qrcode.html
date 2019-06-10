@@ -39,11 +39,11 @@
                     <div class="form-group">
                         <label for="ssid">SSID</label>
                         <input type="text" class="form-control" id="ssid" aria-describedby="emailHelp"
-                               placeholder="SSID">
+                               placeholder="SSID" th:value="${ssid}">
                     </div>
                     <div class="form-group">
                         <label for="password">Hasło</label>
-                        <input type="text" class="form-control" id="password" placeholder="Hasło">
+                        <input type="text" class="form-control" id="password" placeholder="Hasło" th:value="${password}">
                     </div>
 
                 </form>
@@ -52,12 +52,12 @@
                 <form id="address-form" class="" onsubmit="return false;">
                     <div class="form-group">
                         <label for="address">Adres serwera</label>
-                        <input type="text" class="form-control" id="address" placeholder="Adres serwera">
+                        <input type="text" class="form-control" id="address" placeholder="Adres serwera" th:value="${address}">
                     </div>
                 </form>
             </div>
         </div>
-        <div class="row text-center">
+        <div class="row text-center justify-content-center">
             <button type="submit" onclick="generateCodes()" class="btn btn-primary">Generuj kody
             </button>
         </div>
@@ -78,7 +78,7 @@
                 <div id="qrcode-address"  class="text-center" ></div>
             </div>
         </div>
-        <div class="row text-center">
+        <div class="row text-center justify-content-center">
             <button type="submit" onclick="editCodes()" class="btn btn-primary">Edytuj kody</button>
         </div>
     </div>
@@ -120,7 +120,7 @@
         while (element.firstChild) {
             element.removeChild(element.firstChild);
         }
-        element.style.paddingLeft = document.documentElement.clientWidth * 0.025 + 'px';
+        element.style.paddingLeft = document.documentElement.clientWidth * 0.065 + 'px';
         new QRCode(document.getElementById(elementId), {
             text: text,
             width: document.documentElement.clientWidth * 0.3,

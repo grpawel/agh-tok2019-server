@@ -16,6 +16,8 @@ import pl.edu.agh.toik.infun.model.requests.TaskConfig;
 import pl.edu.agh.toik.infun.services.IFolderScanService;
 import pl.edu.agh.toik.infun.services.IRoomService;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -159,7 +161,15 @@ public class InfunController {
     }
 
     @GetMapping("/qrcode")
-    String getQrCode() {
+    String getQrCode(Model model) {
+        model.addAttribute("ssid", "robolab");
+        model.addAttribute("password", "RobolabPanda2012");
+        try {
+            String ip = InetAddress.getLocalHost().getHostAddress();
+            model.addAttribute("address", "https://" + ip + ":8443/room/join");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         return "qrcode";
     }
 }
