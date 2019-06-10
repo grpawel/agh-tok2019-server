@@ -86,7 +86,7 @@ function createChart() {
             minimum: 0,
             viewportMinimum: 0,
             gridColor: "rgba(1,77,101,.1)",
-            interval: 1,
+            // interval: 1,
             includeZero: true,
             title: "Punkty",
             labelFormatter: function (e) {
