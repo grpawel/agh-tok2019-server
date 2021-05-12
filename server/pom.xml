@@ -10,7 +10,7 @@
 
     <properties>
         <!-- Spring -->
-        <org.springframework.security.version>4.2.0.RELEASE</org.springframework.security.version>
+        <org.springframework.security.version>5.2.10.RELEASE</org.springframework.security.version>
         <codahale.metrics.version>3.0.2</codahale.metrics.version>
     </properties>
 
